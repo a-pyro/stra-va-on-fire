@@ -128,3 +128,23 @@ export const signOutAction = async () => {
   await supabase.auth.signOut()
   return redirect("/sign-in")
 }
+
+export const signInWithGoogleAction = async () => {
+  const orgin = headers().get("origin")
+  const supabase = createServerSideClient()
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${orgin}/auth/callback`,
+    },
+  })
+
+  console.log("🚀 ~ signInWithGoogleAction ~ error:", error)
+
+  if (data.url) {
+    redirect(data.url) // use the redirect API for your server framework
+  }
+
+  // return redirect("/protected")
+}
