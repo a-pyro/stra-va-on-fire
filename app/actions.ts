@@ -142,9 +142,5 @@ export const signInWithGoogleAction = async () => {
 
   console.log("🚀 ~ signInWithGoogleAction ~ error:", error)
 
-  if (data.url) {
-    redirect(data.url) // use the redirect API for your server framework
-  }
-
-  // return redirect("/protected")
+  if (data.url) redirect(data.url)
 }

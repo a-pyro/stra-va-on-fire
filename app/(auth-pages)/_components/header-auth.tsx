@@ -1,8 +1,8 @@
 import { signInWithGoogleAction, signOutAction } from "@/app/actions"
+import { Button } from "@/components/ui/button"
 
 import { createServerSideClient } from "@/lib/supabase/server"
 import Link from "next/link"
-import { Button } from "./ui/button"
 
 export default async function AuthButton() {
   const {

@@ -3,6 +3,9 @@
   "arrowParens": "always",
   "printWidth": 80,
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindAttributes": ["classValue", "innerClassValue", "outerClassValueValue"]
+  "tailwindAttributes": [
+    "classValue",
+    "innerClassValue",
+    "outerClassValueValue"
+  ]
 }
-

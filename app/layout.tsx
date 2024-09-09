@@ -1,4 +1,4 @@
-import HeaderAuth from "@/components/header-auth"
+import HeaderAuth from "@/app/(auth-pages)/_components/header-auth"
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
