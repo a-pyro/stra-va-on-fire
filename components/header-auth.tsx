@@ -1,13 +1,13 @@
 import { signOutAction } from "@/app/actions"
 
-import { createClient } from "@/lib/supabase/server"
+import { createServerSideClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import { Button } from "./ui/button"
 
 export default async function AuthButton() {
   const {
     data: { user },
-  } = await createClient().auth.getUser()
+  } = await createServerSideClient().auth.getUser()
 
   return user ? (
     <div className="flex items-center gap-4">

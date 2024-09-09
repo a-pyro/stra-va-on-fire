@@ -10,7 +10,7 @@ export default function Login({ searchParams }: { searchParams: Message }) {
     <form className="flex min-w-64 flex-1 flex-col">
       <h1 className="text-2xl font-medium">Sign in</h1>
       <p className="text-sm text-foreground">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link className="font-medium text-foreground underline" href="/sign-up">
           Sign up
         </Link>
