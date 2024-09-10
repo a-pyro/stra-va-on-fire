@@ -1,3 +1,4 @@
+import { signInWithStravaAction } from "@/app/(auth-pages)/actions"
 import { cookies } from "next/headers"
 import "server-only"
 import { envVars } from "../env-vars"
@@ -33,6 +34,11 @@ type StravaAuthResponse = {
   access_token: string
   athlete: StravaAthlete
 }
+
+type StravaSessionRefreshResponse = Omit<
+  StravaAuthResponse,
+  "athlete" | "token_type"
+>
 
 const {
   NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,
@@ -86,17 +92,45 @@ const createStravaClient = () => {
     return rest
   }
 
-  const refreshSession = async (
-    refreshToken: string,
-  ): Promise<Omit<StravaAuthResponse, "athlete" | "token_type">> => {
-    const response = await fetchStravaToken<
-      Omit<StravaAuthResponse, "athlete" | "token_type">
-    >({
+  const isSessionExpired = () => {
+    const expiresAt = cookieStore.get("strava_expires_at")
+    if (!expiresAt) return true
+    return +expiresAt.value * 1000 < Date.now()
+  }
+
+  const refreshSession = async () => {
+    const refreshToken = cookieStore.get("strava_refresh_token")
+    // first time sign in or session has been cleared
+    if (!refreshToken) return signInWithStravaAction()
+
+    const isExpired = isSessionExpired()
+
+    if (!isExpired) {
+      console.log("Session is not expired, no need to refresh")
+      return {
+        access_token: JSON.parse(
+          cookieStore.get("strava_access_token")?.value as string,
+        ),
+        expires_at: JSON.parse(
+          cookieStore.get("strava_expires_at")?.value as string,
+        ),
+        expires_in: JSON.parse(
+          cookieStore.get("strava_expires_in")?.value as string,
+        ),
+        refresh_token: JSON.parse(
+          cookieStore.get("strava_refresh_token")?.value as string,
+        ),
+      }
+    }
+
+    console.log("Session is expired, refreshing")
+    const response = await fetchStravaToken<StravaSessionRefreshResponse>({
       client_id: STRAVA_CLIENT_ID,
       client_secret: STRAVA_CLIENT_SECRET,
-      refresh_token: refreshToken,
+      refresh_token: refreshToken.value,
       grant_type: "refresh_token",
     })
+
     Object.entries(response).forEach(([key, value]) => {
       cookieStore.set(`strava_${key}`, JSON.stringify(value), {
         ...cookieOptions,
@@ -105,12 +139,6 @@ const createStravaClient = () => {
     })
 
     return response
-  }
-
-  const isSessionExpired = () => {
-    const expiresAt = cookieStore.get("strava_expires_at")
-    if (!expiresAt) return true
-    return +expiresAt.value * 1000 < Date.now()
   }
 
   const getAthlete = async () => {

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr"
 import { type NextRequest, NextResponse } from "next/server"
 import { envVars } from "../env-vars"
+import { createStravaClient } from "../strava/client"
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -35,10 +36,13 @@ export const updateSession = async (request: NextRequest) => {
         },
       },
     )
+    const strava = createStravaClient()
 
     // This will refresh session if expired - required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     const user = await supabase.auth.getUser()
+
+    await strava.refreshSession()
 
     // protected routes
     if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
