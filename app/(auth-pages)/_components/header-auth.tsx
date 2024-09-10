@@ -13,21 +13,13 @@ export default async function AuthButton() {
   const {
     data: { user },
   } = await createServerSideClient().auth.getUser()
-  const athlete = await createStravaClient().getAthlete()
-  console.log("🚀 ~ AuthButton ~ athlete:", athlete)
 
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!
       <form>
         <div className="flex gap-2">
-          <Button
-            type="submit"
-            formAction={signInWithStravaAction}
-            variant={"outline"}
-          >
-            Connect Strava Account
-          </Button>
+          <AtheleteHeaderMenu />
           <Button type="submit" formAction={signOutAction} variant={"outline"}>
             Sign out
           </Button>
@@ -49,6 +41,28 @@ export default async function AuthButton() {
           Sign in with Google
         </Button>
       </form>
+    </div>
+  )
+}
+
+const AtheleteHeaderMenu = async () => {
+  const athlete = await createStravaClient().getAthlete()
+
+  if (!athlete)
+    return (
+      <Button
+        type="submit"
+        formAction={signInWithStravaAction}
+        variant={"outline"}
+      >
+        Connect Strava Account
+      </Button>
+    )
+
+  return (
+    <div>
+      <img src={athlete.profile} alt={athlete.firstname} />
+      <p>{athlete.username}</p>
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import "server-only"
 import { envVars } from "../env-vars"
 
@@ -116,7 +115,7 @@ const createStravaClient = () => {
 
   const getAthlete = async () => {
     const token = cookieStore.get("strava_access_token")
-    if (!token) return redirect("/sign-in")
+    if (!token || isSessionExpired()) return null
     return await fetch(`${STRAVA_API_URL}/athlete`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(token.value)}`,
