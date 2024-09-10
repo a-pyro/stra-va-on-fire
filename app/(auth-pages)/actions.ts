@@ -136,6 +136,7 @@ export const signOutAction = async () => {
 
 export const signInWithGoogleAction = async () => {
   const orgin = headers().get("origin")
+  console.log("🚀 ~ signInWithGoogleAction ~ orgin:", orgin)
   const supabase = createServerSideClient()
 
   const { data, error } = await supabase.auth.signInWithOAuth({
