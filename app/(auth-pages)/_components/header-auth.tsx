@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 
+import { createStravaClient } from "@/lib/strava/client"
 import { createServerSideClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import {
@@ -12,6 +13,8 @@ export default async function AuthButton() {
   const {
     data: { user },
   } = await createServerSideClient().auth.getUser()
+  const athlete = await createStravaClient().getAthlete()
+  console.log("🚀 ~ AuthButton ~ athlete:", athlete)
 
   return user ? (
     <div className="flex items-center gap-4">
