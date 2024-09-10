@@ -1,6 +1,7 @@
 "use server"
 
 import { envVars } from "@/lib/env-vars"
+import { getStravaCallbackUrl } from "@/lib/strava"
 import { createStravaClient } from "@/lib/strava/client"
 import { createServerSideClient } from "@/lib/supabase/server"
 import { encodedRedirect } from "@/lib/utils"
@@ -160,10 +161,9 @@ const AUTHORIZATION_SCOPES = [
 ] as const
 
 export const signInWithStravaAction = async () => {
-  const origin = headers().get("origin")
   const stravaAuthUrl = envVars.NEXT_PUBLIC_STRAVA_AUTH_URL
   const stravaClientId = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
-  const redirectUri = `${origin}/auth/callback?source=strava`
+  const redirectUri = getStravaCallbackUrl()
   const scopes = AUTHORIZATION_SCOPES.join(",")
   const approvalPrompt = "force"
   const response_type = "code"

@@ -1,38 +1,43 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps"
-import { createServerSideClient } from "@/lib/supabase/server"
-import { InfoIcon } from "lucide-react"
-import { redirect } from "next/navigation"
+import { TypographyH2 } from "@/components/typography"
+import { Button } from "@/components/ui/button"
+import { envVars } from "@/lib/env-vars"
+import { getStravaCallbackUrl } from "@/lib/strava"
 
-export default async function ProtectedPage() {
-  const supabase = createServerSideClient()
+export default async function Page() {
+  const subscribeStravaWebhookAction = async () => {
+    "use server"
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    const formData = new URLSearchParams()
+    formData.append("client_id", envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID)
+    formData.append("client_secret", envVars.STRAVA_CLIENT_SECRET)
+    formData.append("callback_url", getStravaCallbackUrl())
+    formData.append("verify_token", envVars.STRAVA_VERIFY_TOKEN)
 
-  if (!user) {
-    return redirect("/sign-in")
+    const response = await fetch(
+      "https://www.strava.com/api/v3/push_subscriptions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
+      },
+    )
+
+    if (response.ok) {
+      console.log("Subscription created successfully")
+    } else {
+      console.error("Failed to create subscription")
+    }
   }
-
   return (
-    <div className="flex w-full flex-1 flex-col gap-12">
-      <div className="w-full">
-        <div className="flex items-center gap-3 rounded-md bg-accent p-3 px-5 text-sm text-foreground">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
-      </div>
-      <div className="flex flex-col items-start gap-2">
-        <h2 className="mb-4 text-2xl font-bold">Your user details</h2>
-        <pre className="max-h-32 overflow-auto rounded border p-3 font-mono text-xs">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="mb-4 text-2xl font-bold">Next steps</h2>
-        <FetchDataSteps />
-      </div>
+    <div className="flex h-full flex-1 flex-col">
+      <TypographyH2>Custom Acitity Messages</TypographyH2>
+      <form action={subscribeStravaWebhookAction}>
+        <Button type="submit" className="w-full">
+          Activate Activity Tracking
+        </Button>
+      </form>
     </div>
   )
 }

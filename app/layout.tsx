@@ -1,20 +1,10 @@
 import HeaderAuth from "@/app/(auth-pages)/_components/header-auth"
 import { ThemeSwitcher } from "@/components/theme-switcher"
+import { GeistSans } from "geist/font/sans"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
-import localFont from "next/font/local"
-import "./globals.css"
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-})
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-})
+import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Hot Strava",
@@ -27,10 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning className={GeistSans.className}>
+      <body className="antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -51,7 +39,7 @@ export default function RootLayout({
                 {children}
               </div>
 
-              <footer className="mx-auto flex w-full items-center justify-center gap-8 border-t py-16 text-center text-xs">
+              <footer className="mx-auto mt-auto flex w-full items-center justify-center gap-8 border-t py-16 text-center text-xs">
                 <p>Powered by @a-pyro </p>
               </footer>
             </div>
