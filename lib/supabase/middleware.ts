@@ -11,62 +11,50 @@ export const updateSession = async (request: NextRequest) => {
   const hubChallenge = requestUrl.searchParams.get("hub.challenge")
   console.log("🚀 ~ updateSession ~ hubChallenge:", hubChallenge)
 
-  try {
-    // Create an unmodified response
-    let response = NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    })
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-    const supabase = createServerClient(
-      envVars.NEXT_PUBLIC_SUPABASE_URL!,
-      envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll()
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            )
-            response = NextResponse.next({
-              request,
-            })
-            cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options),
-            )
-          },
+  const supabase = createServerClient(
+    envVars.NEXT_PUBLIC_SUPABASE_URL!,
+    envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          )
+          response = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          )
         },
       },
-    )
-    const strava = createStravaClient()
+    },
+  )
+  const strava = createStravaClient()
 
-    // This will refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/server-side/nextjs
-    const user = await supabase.auth.getUser()
+  // This will refresh session if expired - required for Server Components
+  // https://supabase.com/docs/guides/auth/server-side/nextjs
+  const user = await supabase.auth.getUser()
 
-    await strava.refreshSession()
+  await strava.refreshSession()
 
-    // protected routes
-    if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
-      return NextResponse.redirect(new URL("/sign-in", request.url))
-    }
-
-    if (request.nextUrl.pathname === "/" && !user.error) {
-      return NextResponse.redirect(new URL("/protected", request.url))
-    }
-
-    return response
-  } catch (e) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
-    // Check out http://localhost:3000 for Next Steps.
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    })
+  // protected routes
+  if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
+    return NextResponse.redirect(new URL("/sign-in", request.url))
   }
+
+  if (request.nextUrl.pathname === "/" && !user.error) {
+    return NextResponse.redirect(new URL("/protected", request.url))
+  }
+
+  return response
 }

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
-  console.log("🚀 ~ GET ~ strava callback", { requestUrl })
+  console.log("🚀 ~ GET ~ strava/callback", { request })
   const code = requestUrl.searchParams.get("code")
   const hubChallenge = requestUrl.searchParams.get("hub.challenge")
   const hubMode = requestUrl.searchParams.get("hub.mode")
