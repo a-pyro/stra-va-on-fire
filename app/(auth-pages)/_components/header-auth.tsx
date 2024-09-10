@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { createServerSideClient } from "@/lib/supabase/server"
 import Link from "next/link"
-import { signInWithGoogleAction } from "../actions"
+import { signInWithGoogleAction, signOutAction } from "../actions"
 import { AthleteHeaderMenu } from "./athlete-header-menu"
 
 export default async function AuthButton() {
@@ -13,6 +13,17 @@ export default async function AuthButton() {
     <div className="flex items-center gap-4">
       <span className="text-sm text-muted-foreground">Hey, {user.email}!</span>
       <AthleteHeaderMenu />
+      <form>
+        <Button
+          type="submit"
+          className="w-full"
+          formAction={signOutAction}
+          variant="outline"
+          size="sm"
+        >
+          Sign out
+        </Button>
+      </form>
     </div>
   ) : (
     <div className="flex gap-2">

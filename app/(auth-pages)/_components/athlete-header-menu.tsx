@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserCircle } from "lucide-react"
 import Link from "next/link"
-import { signInWithStravaAction, signOutAction } from "../actions"
+import { signInWithStravaAction } from "../actions"
 
 export const AthleteHeaderMenu = async () => {
   const athlete = await createStravaClient().getAthlete()
@@ -59,19 +59,6 @@ export const AthleteHeaderMenu = async () => {
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <form>
-            <Button
-              type="submit"
-              className="w-full"
-              formAction={signOutAction}
-              variant="outline"
-              size="sm"
-            >
-              Sign out
-            </Button>
-          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
