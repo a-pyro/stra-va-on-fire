@@ -1,3 +1,4 @@
+import { createStravaClient } from "@/lib/strava/client"
 import { createServerSideClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
@@ -14,7 +15,9 @@ export async function GET(request: Request) {
 
   if (code) {
     if (source && source === "strava") {
-      // do strava logic
+      const strava = createStravaClient()
+      const stravaResponse = await strava.exchangeCodeForSession(code)
+      console.log("🚀 ~ GET ~ stravaResponse:", stravaResponse)
     } else {
       const supabase = createServerSideClient()
       await supabase.auth.exchangeCodeForSession(code)
