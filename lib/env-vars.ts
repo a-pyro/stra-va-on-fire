@@ -1,8 +1,10 @@
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
-export const env = createEnv({
-  server: {},
+export const envVars = createEnv({
+  server: {
+    STRAVA_CLIENT_SECRET: z.string().min(1),
+  },
 
   /**
    * The prefix that client-side variables must have. This is enforced both at
@@ -16,6 +18,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_AUTH_URL: z.string().url(),
+    NEXT_PUBLIC_STRAVA_TOKEN_URL: z.string().url(),
   },
 
   /**

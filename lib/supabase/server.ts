@@ -1,13 +1,14 @@
 import { createServerClient as supaCreateServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
-import { env } from "../env"
+import { envVars } from "../env-vars"
+import { Database } from "./generated-types"
 
 export const createServerSideClient = () => {
   const cookieStore = cookies()
 
-  return supaCreateServerClient(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  return supaCreateServerClient<Database>(
+    envVars.NEXT_PUBLIC_SUPABASE_URL,
+    envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {

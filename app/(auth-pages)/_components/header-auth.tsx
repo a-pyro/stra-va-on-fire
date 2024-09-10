@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button"
 
 import { createServerSideClient } from "@/lib/supabase/server"
 import Link from "next/link"
-import { signInWithGoogleAction, signOutAction } from "../actions"
+import {
+  signInWithGoogleAction,
+  signInWithStravaAction,
+  signOutAction,
+} from "../actions"
 
 export default async function AuthButton() {
   const {
@@ -12,10 +16,19 @@ export default async function AuthButton() {
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
+      <form>
+        <div className="flex gap-2">
+          <Button
+            type="submit"
+            formAction={signInWithStravaAction}
+            variant={"outline"}
+          >
+            Connect Strava Account
+          </Button>
+          <Button type="submit" formAction={signOutAction} variant={"outline"}>
+            Sign out
+          </Button>
+        </div>
       </form>
     </div>
   ) : (

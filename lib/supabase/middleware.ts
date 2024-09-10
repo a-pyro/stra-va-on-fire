@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { type NextRequest, NextResponse } from "next/server"
-import { env } from "../env"
+import { envVars } from "../env-vars"
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -14,8 +14,8 @@ export const updateSession = async (request: NextRequest) => {
     })
 
     const supabase = createServerClient(
-      env.NEXT_PUBLIC_SUPABASE_URL!,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      envVars.NEXT_PUBLIC_SUPABASE_URL!,
+      envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
           getAll() {

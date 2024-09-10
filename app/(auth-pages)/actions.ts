@@ -1,6 +1,6 @@
 "use server"
 
-import { env } from "@/lib/env"
+import { envVars } from "@/lib/env-vars"
 import { createServerSideClient } from "@/lib/supabase/server"
 import { encodedRedirect } from "@/lib/utils"
 import { headers } from "next/headers"
@@ -162,9 +162,9 @@ activity:write: access to create manual activities and uploads, and access to ed
 
 export const signInWithStravaAction = async () => {
   const origin = headers().get("origin")
-  const stravaAuthUrl = env.NEXT_PUBLIC_STRAVA_AUTH_URL
-  const stravaClientId = env.NEXT_PUBLIC_STRAVA_CLIENT_ID
-  const redirectUri = `${origin}/auth/callback`
+  const stravaAuthUrl = envVars.NEXT_PUBLIC_STRAVA_AUTH_URL
+  const stravaClientId = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
+  const redirectUri = `${origin}/auth/callback?source=strava`
   const scopes =
     "read,read_all,profile:read_all,profile:write,activity:read,activity:read_all,activity:write"
   const approvalPrompt = "force"

@@ -10,7 +10,7 @@
     "lint": "next lint",
     "check:all": "npm run typecheck && npm run lint",
     "add:component": "npx shadcn@latest add",
-    "zodify": "npx supabase-to-zod --input lib/supabase/generated-types.ts --output lib/supabase/zod-types.ts",
+    "zodify": "npx supabase-to-zod --input lib/supabase/generated-types.ts --output lib/supabase/zod-schemas.ts",
     "gen:types": "npx supabase gen types typescript --project-id cpmmqltoyvtgbizjuogt > lib/supabase/generated-types.ts && npm run zodify",
     "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i"
   },
