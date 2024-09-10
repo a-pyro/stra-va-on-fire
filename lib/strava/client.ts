@@ -2,7 +2,6 @@
  * Strava API client
  * - Token Exchange
  * - Refresh Token
- * - Get Session
  */
 
 import { envVars } from "../env-vars"
@@ -16,45 +15,47 @@ type AuthResponse = {
   athlete: unknown
 }
 
-const STRAVA_CLIENT_ID = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
-const STRAVA_CLIENT_SECRET = envVars.STRAVA_CLIENT_SECRET
-const STRAVA_TOKEN_URL = envVars.NEXT_PUBLIC_STRAVA_TOKEN_URL
+const {
+  NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,
+  STRAVA_CLIENT_SECRET,
+  NEXT_PUBLIC_STRAVA_TOKEN_URL: STRAVA_TOKEN_URL,
+} = envVars
 
-export const createStravaClient = () => {
-  const exchangeCodeForSession = async (code: string) => {
-    const url = new URL(STRAVA_TOKEN_URL)
-    url.searchParams.append("client_id", STRAVA_CLIENT_ID)
-    url.searchParams.append("client_secret", STRAVA_CLIENT_SECRET)
-    url.searchParams.append("code", code)
-    url.searchParams.append("grant_type", "authorization_code")
+const fetchStravaToken = async (params: Record<string, string>) => {
+  const url = new URL(STRAVA_TOKEN_URL)
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.append(key, value)
+  })
 
-    const response = await fetch(url.toString(), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const response = await fetch(url.toString(), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+
+  return response.json()
+}
+
+const createStravaClient = () => {
+  const exchangeCodeForSession = async (
+    code: string,
+  ): Promise<AuthResponse> => {
+    return fetchStravaToken({
+      client_id: STRAVA_CLIENT_ID,
+      client_secret: STRAVA_CLIENT_SECRET,
+      code,
+      grant_type: "authorization_code",
     })
-
-    return response.json() as Promise<AuthResponse>
   }
 
-  const refreshSession = async (refreshToken: string) => {
-    const url = new URL(STRAVA_TOKEN_URL)
-    url.searchParams.append("client_id", STRAVA_CLIENT_ID)
-    url.searchParams.append("client_secret", STRAVA_CLIENT_SECRET)
-    url.searchParams.append("refresh_token", refreshToken)
-    url.searchParams.append("grant_type", "refresh_token")
-
-    const response = await fetch(url.toString(), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const refreshSession = async (
+    refreshToken: string,
+  ): Promise<Omit<AuthResponse, "athlete" | "token_type">> => {
+    return fetchStravaToken({
+      client_id: STRAVA_CLIENT_ID,
+      client_secret: STRAVA_CLIENT_SECRET,
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
     })
-
-    return response.json() as Promise<
-      Omit<AuthResponse, "athlete" | "token_type">
-    >
   }
 
   return {
@@ -62,3 +63,5 @@ export const createStravaClient = () => {
     refreshSession,
   }
 }
+
+export { createStravaClient }
