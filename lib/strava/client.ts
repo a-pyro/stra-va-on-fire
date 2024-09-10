@@ -123,11 +123,20 @@ const createStravaClient = () => {
     }).then(async (res) => (await res.json()) as StravaAthlete)
   }
 
+  const signOut = () => {
+    cookieStore.delete("strava_access_token")
+    cookieStore.delete("strava_expires_at")
+    cookieStore.delete("strava_refresh_token")
+    cookieStore.delete("strava_token_type")
+    cookieStore.delete("strava_expires_in")
+  }
+
   return {
     exchangeCodeForSession,
     refreshSession,
     getAthlete,
     isSessionExpired,
+    signOut,
   }
 }
 

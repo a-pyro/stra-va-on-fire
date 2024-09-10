@@ -1,6 +1,7 @@
 "use server"
 
 import { envVars } from "@/lib/env-vars"
+import { createStravaClient } from "@/lib/strava/client"
 import { createServerSideClient } from "@/lib/supabase/server"
 import { encodedRedirect } from "@/lib/utils"
 import { headers } from "next/headers"
@@ -126,6 +127,8 @@ export const resetPasswordAction = async (formData: FormData) => {
 
 export const signOutAction = async () => {
   const supabase = createServerSideClient()
+  const strava = createStravaClient()
+  strava.signOut()
   await supabase.auth.signOut()
   return redirect("/sign-in")
 }
