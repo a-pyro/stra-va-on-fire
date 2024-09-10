@@ -1,5 +1,6 @@
 "use server"
 
+import { env } from "@/lib/env"
 import { createServerSideClient } from "@/lib/supabase/server"
 import { encodedRedirect } from "@/lib/utils"
 import { headers } from "next/headers"
@@ -143,4 +144,33 @@ export const signInWithGoogleAction = async () => {
   console.log("🚀 ~ signInWithGoogleAction ~ error:", error)
 
   if (data.url) redirect(data.url)
+}
+
+/*  http:www.strava.com/oauth/authorize?client_id=[REPLACE_WITH_YOUR_CLIENT_ID]&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read
+
+
+Requested scopes, as a comma delimited string, e.g. "activity:read_all,activity:write". Applications should request only the scopes required for the application to function normally. The scope activity:read is required for activity webhooks.
+
+read: read public segments, public routes, public profile data, public posts, public events, club feeds, and leaderboards
+read_all:read private routes, private segments, and private events for the user
+profile:read_all: read all profile information even if the user has set their profile visibility to Followers or Only You
+profile:write: update the user's weight and Functional Threshold Power (FTP), and access to star or unstar segments on their behalf
+activity:read: read the user's activity data for activities that are visible to Everyone and Followers, excluding privacy zone data
+activity:read_all: the same access as activity:read, plus privacy zone data and access to read the user's activities with visibility set to Only You
+activity:write: access to create manual activities and uploads, and access to edit any activities that are visible to the app, based on activity read access level
+ */
+
+export const signInWithStravaAction = async () => {
+  const origin = headers().get("origin")
+  const stravaAuthUrl = env.NEXT_PUBLIC_STRAVA_AUTH_URL
+  const stravaClientId = env.NEXT_PUBLIC_STRAVA_CLIENT_ID
+  const redirectUri = `${origin}/auth/callback`
+  const scopes =
+    "read,read_all,profile:read_all,profile:write,activity:read,activity:read_all,activity:write"
+  const approvalPrompt = "force"
+  const response_type = "code"
+
+  redirect(
+    `${stravaAuthUrl}?client_id=${stravaClientId}&redirect_uri=${redirectUri}&approval_prompt=${approvalPrompt}&scope=${scopes}&response_type=${response_type}`,
+  )
 }
