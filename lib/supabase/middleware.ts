@@ -5,10 +5,6 @@ import { envVars } from "../env-vars"
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
   // Feel free to remove once you have Supabase connected.
-  const requestUrl = new URL(request.url)
-
-  const hubChallenge = requestUrl.searchParams.get("hub.challenge")
-  console.log("🚀 ~ updateSession ~ hubChallenge:", hubChallenge)
 
   let response = NextResponse.next({
     request: {
