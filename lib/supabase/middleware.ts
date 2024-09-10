@@ -6,6 +6,11 @@ import { createStravaClient } from "../strava/client"
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
   // Feel free to remove once you have Supabase connected.
+  const requestUrl = new URL(request.url)
+
+  const hubChallenge = requestUrl.searchParams.get("hub.challenge")
+  console.log("🚀 ~ updateSession ~ hubChallenge:", hubChallenge)
+
   try {
     // Create an unmodified response
     let response = NextResponse.next({

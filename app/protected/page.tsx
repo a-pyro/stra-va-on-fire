@@ -13,23 +13,23 @@ export default async function Page() {
     formData.append("callback_url", getStravaCallbackUrl())
     formData.append("verify_token", envVars.STRAVA_VERIFY_TOKEN)
 
-    const response = await fetch(
-      "https://www.strava.com/api/v3/push_subscriptions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: formData.toString(),
+    const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions`
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-    )
+      body: formData.toString(),
+    })
 
     if (response.ok) {
-      console.log("Subscription created successfully")
+      console.log("Subscription created successfully:", await response.json())
     } else {
-      console.error("Failed to create subscription")
+      console.error("Failed to create subscription:", await response.json())
     }
   }
+
   return (
     <div className="flex h-full flex-1 flex-col">
       <TypographyH2>Custom Acitity Messages</TypographyH2>
