@@ -1,6 +1,7 @@
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from 'sonner'
 
 import { AuthButton as HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
 import { ThemeSwitcher } from '@/components/theme-switcher'
@@ -35,7 +36,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="flex max-w-5xl flex-col gap-20 p-5">
                 {children}
               </div>
-
+              <Toaster />
               <footer className="mx-auto mt-auto flex w-full items-center justify-center gap-8 border-t py-16 text-center text-xs">
                 <p>Powered by @a-pyro </p>
               </footer>
