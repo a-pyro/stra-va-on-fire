@@ -24,7 +24,7 @@ export default async function Page() {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: formData.toString(),
+      body: formData.toString,
     })
 
     if (response.ok) {
