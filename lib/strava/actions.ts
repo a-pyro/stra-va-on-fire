@@ -16,13 +16,16 @@ export const subscribeStravaWebhookAction = async () => {
 
   const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions`
 
+  const body = formData.toString()
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: formData.toString(),
+    body,
   })
+
   if (!response.ok)
     return encodedRedirect(
       'error',
