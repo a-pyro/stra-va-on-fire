@@ -6,7 +6,7 @@ import { SignInWithStravaButton } from '../(auth-pages)/_components/sign-in-with
 
 import { ActivateTrackingButton } from './_components/activate-tracking-button'
 
-const Page = async ({ searchParams }: { searchParams: Message }) => {
+const Page = async ({ searchParams }: { searchParams?: Message }) => {
   const athlete = await createStravaClient().getAthlete()
 
   if (!athlete)
@@ -25,7 +25,7 @@ const Page = async ({ searchParams }: { searchParams: Message }) => {
   return (
     <>
       <ActivateTrackingButton />
-      <FormMessage message={searchParams} />
+      {searchParams ? <FormMessage message={searchParams} /> : null}
     </>
   )
 }
