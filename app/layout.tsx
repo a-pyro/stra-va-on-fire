@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 
-import { HeaderAuth as HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
+import { HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
 import { ThemeSwitcher } from '@/components/theme-switcher'
 
 import './globals.css'
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning className={GeistSans.className} lang="en">
-      <body className="antialiased">
+      <body className="bg-stone-50 text-slate-950 antialiased dark:bg-stone-950 dark:text-slate-50">
         <ThemeProvider
           disableTransitionOnChange
           enableSystem
