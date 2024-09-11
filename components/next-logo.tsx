@@ -1,4 +1,4 @@
-export default function NextLogo() {
+export const NextLogo = () => {
   return (
     <svg
       aria-label="Next.js logotype"

@@ -1,10 +1,13 @@
-import { Button } from "@/components/ui/button"
-import { createServerSideClient } from "@/lib/supabase/server"
-import Link from "next/link"
-import { signInWithGoogleAction, signOutAction } from "../actions"
-import { AthleteHeaderMenu } from "./athlete-header-menu"
+import Link from 'next/link'
 
-export default async function AuthButton() {
+import { Button } from '@/components/ui/button'
+import { createServerSideClient } from '@/lib/supabase/server'
+
+import { signInWithGoogleAction, signOutAction } from '../actions'
+
+import { AthleteHeaderMenu } from './athlete-header-menu'
+
+export const AuthButton = async () => {
   const {
     data: { user },
   } = await createServerSideClient().auth.getUser()
@@ -15,11 +18,11 @@ export default async function AuthButton() {
       <AthleteHeaderMenu />
       <form>
         <Button
-          type="submit"
           className="w-full"
           formAction={signOutAction}
-          variant="outline"
           size="sm"
+          type="submit"
+          variant="outline"
         >
           Sign out
         </Button>
@@ -34,7 +37,7 @@ export default async function AuthButton() {
         <Link href="/sign-up">Sign up</Link>
       </Button>
       <form action={signInWithGoogleAction}>
-        <Button type="submit" size="sm" variant="default">
+        <Button size="sm" type="submit" variant="default">
           Sign in with Google
         </Button>
       </form>

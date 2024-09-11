@@ -1,7 +1,7 @@
-import Hero from "@/components/hero"
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps"
+import { Hero } from '@/components/hero'
+import { SignUpUserSteps } from '@/components/tutorial/sign-up-user-steps'
 
-export default async function Index() {
+const Index = () => {
   return (
     <>
       <Hero />
@@ -12,3 +12,5 @@ export default async function Index() {
     </>
   )
 }
+
+export default Index

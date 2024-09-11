@@ -1,27 +1,25 @@
-import { Checkbox } from "../ui/checkbox"
+import { Checkbox } from '../ui/checkbox'
 
-export function TutorialStep({
+export const TutorialStep = ({
   title,
   children,
 }: {
   title: string
   children: React.ReactNode
-}) {
+}) => {
   return (
     <li className="relative">
       <Checkbox
+        className="peer absolute top-[3px] mr-2"
         id={title}
         name={title}
-        className={`peer absolute top-[3px] mr-2`}
       />
       <label
+        className="relative text-base font-medium text-foreground peer-checked:line-through"
         htmlFor={title}
-        className={`relative text-base font-medium text-foreground peer-checked:line-through`}
       >
         <span className="ml-8">{title}</span>
-        <div
-          className={`ml-8 text-sm font-normal text-muted-foreground peer-checked:line-through`}
-        >
+        <div className="ml-8 text-sm font-normal text-muted-foreground peer-checked:line-through">
           {children}
         </div>
       </label>

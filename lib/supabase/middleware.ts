@@ -1,6 +1,8 @@
-import { createServerClient } from "@supabase/ssr"
-import { type NextRequest, NextResponse } from "next/server"
-import { envVars } from "../env-vars"
+import { createServerClient } from '@supabase/ssr'
+import { type ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
+import { type NextRequest, NextResponse } from 'next/server'
+
+import { envVars } from '../env-vars'
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -13,8 +15,8 @@ export const updateSession = async (request: NextRequest) => {
   })
 
   const supabase = createServerClient(
-    envVars.NEXT_PUBLIC_SUPABASE_URL!,
-    envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    envVars.NEXT_PUBLIC_SUPABASE_URL,
+    envVars.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -28,7 +30,11 @@ export const updateSession = async (request: NextRequest) => {
             request,
           })
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
+            response.cookies.set(
+              name,
+              value,
+              options as Partial<ResponseCookie>,
+            ),
           )
         },
       },
@@ -41,12 +47,12 @@ export const updateSession = async (request: NextRequest) => {
   const user = await supabase.auth.getUser()
 
   // protected routes
-  if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
-    return NextResponse.redirect(new URL("/sign-in", request.url))
+  if (request.nextUrl.pathname.startsWith('/protected') && user.error) {
+    return NextResponse.redirect(new URL('/sign-in', request.url))
   }
 
-  if (request.nextUrl.pathname === "/" && !user.error) {
-    return NextResponse.redirect(new URL("/protected", request.url))
+  if (request.nextUrl.pathname === '/' && !user.error) {
+    return NextResponse.redirect(new URL('/protected', request.url))
   }
 
   return response

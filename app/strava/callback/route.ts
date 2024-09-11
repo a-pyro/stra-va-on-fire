@@ -1,12 +1,13 @@
-import { createStravaClient } from "@/lib/strava/client"
-import { NextResponse } from "next/server"
+import { NextResponse } from 'next/server'
+
+import { createStravaClient } from '@/lib/strava/client'
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get("code")
-  const hubChallenge = requestUrl.searchParams.get("hub.challenge")
-  const hubMode = requestUrl.searchParams.get("hub.mode")
-  const hubVerifyToken = requestUrl.searchParams.get("hub.verify_token")
+  const code = requestUrl.searchParams.get('code')
+  const hubChallenge = requestUrl.searchParams.get('hub.challenge')
+  const hubMode = requestUrl.searchParams.get('hub.mode')
+  const hubVerifyToken = requestUrl.searchParams.get('hub.verify_token')
 
   const origin = requestUrl.origin
 
@@ -18,10 +19,9 @@ export async function GET(request: Request) {
   }
 
   if (hubChallenge && hubMode && hubVerifyToken) {
-    console.log("🚀", "Strava callback validation")
-    return new Response(JSON.stringify({ "hub.challenge": hubChallenge }), {
+    return new Response(JSON.stringify({ 'hub.challenge': hubChallenge }), {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
   }

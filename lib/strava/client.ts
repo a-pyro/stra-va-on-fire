@@ -1,7 +1,7 @@
-import { signInWithStravaAction } from "@/app/(auth-pages)/actions"
-import { cookies } from "next/headers"
-import "server-only"
-import { envVars } from "../env-vars"
+import { cookies } from 'next/headers'
+
+import 'server-only'
+import { envVars } from '../env-vars'
 
 type StravaAthlete = {
   id: number
@@ -13,7 +13,7 @@ type StravaAthlete = {
   city: string
   state: string
   country: string
-  sex: "M" | "F"
+  sex: 'M' | 'F'
   premium: boolean
   summit: boolean
   created_at: string
@@ -22,8 +22,8 @@ type StravaAthlete = {
   weight: number | null
   profile_medium: string
   profile: string
-  friend: unknown | null
-  follower: unknown | null
+  friend: unknown
+  follower: unknown
 }
 
 type StravaAuthResponse = {
@@ -35,10 +35,10 @@ type StravaAuthResponse = {
   athlete: StravaAthlete
 }
 
-type StravaSessionRefreshResponse = Omit<
-  StravaAuthResponse,
-  "athlete" | "token_type"
->
+// type StravaSessionRefreshResponse = Omit<
+//   StravaAuthResponse,
+//   'athlete' | 'token_type'
+// >
 
 const {
   NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,
@@ -50,7 +50,7 @@ const {
 const cookieOptions = {
   httpOnly: true,
   secure: true,
-  path: "/",
+  path: '/',
 }
 
 const fetchStravaToken = async <T>(
@@ -62,11 +62,10 @@ const fetchStravaToken = async <T>(
   })
 
   const response = await fetch(url.toString(), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
   })
-
-  return response.json()
+  return response.json() as Promise<T>
 }
 
 const createStravaClient = () => {
@@ -74,12 +73,12 @@ const createStravaClient = () => {
 
   const exchangeCodeForSession = async (
     code: string,
-  ): Promise<Omit<StravaAuthResponse, "athlete" | "token_type">> => {
+  ): Promise<Omit<StravaAuthResponse, 'athlete' | 'token_type'>> => {
     const { athlete: _, ...rest } = await fetchStravaToken<StravaAuthResponse>({
       client_id: STRAVA_CLIENT_ID,
       client_secret: STRAVA_CLIENT_SECRET,
       code,
-      grant_type: "authorization_code",
+      grant_type: 'authorization_code',
     })
 
     Object.entries(rest).forEach(([key, value]) => {
@@ -93,56 +92,49 @@ const createStravaClient = () => {
   }
 
   const isSessionExpired = () => {
-    const expiresAt = cookieStore.get("strava_expires_at")
+    const expiresAt = cookieStore.get('strava_expires_at')
     if (!expiresAt) return true
-    return +expiresAt.value * 1000 < Date.now()
+    return Number(expiresAt.value) * 1000 < Date.now()
   }
 
-  const refreshSession = async () => {
-    const refreshToken = cookieStore.get("strava_refresh_token")
-    // first time sign in or session has been cleared
-    if (!refreshToken) return signInWithStravaAction()
+  // const refreshSession = async () => {
+  //   const refreshToken = cookieStore.get('strava_refresh_token')
+  //   // first time sign in or session has been cleared
+  //   if (!refreshToken) return signInWithStravaAction()
 
-    const isExpired = isSessionExpired()
+  //   const isExpired = isSessionExpired()
 
-    if (!isExpired) {
-      console.log("Session is not expired, no need to refresh")
-      return {
-        access_token: JSON.parse(
-          cookieStore.get("strava_access_token")?.value as string,
-        ),
-        expires_at: JSON.parse(
-          cookieStore.get("strava_expires_at")?.value as string,
-        ),
-        expires_in: JSON.parse(
-          cookieStore.get("strava_expires_in")?.value as string,
-        ),
-        refresh_token: JSON.parse(
-          cookieStore.get("strava_refresh_token")?.value as string,
-        ),
-      }
-    }
+  //   if (!isExpired) {
+  //     console.log('Session is not expired, no need to refresh')
 
-    console.log("Session is expired, refreshing")
-    const response = await fetchStravaToken<StravaSessionRefreshResponse>({
-      client_id: STRAVA_CLIENT_ID,
-      client_secret: STRAVA_CLIENT_SECRET,
-      refresh_token: refreshToken.value,
-      grant_type: "refresh_token",
-    })
+  //     return {
+  //       access_token: cookieStore.get('strava_access_token')?.value,
+  //       expires_at: cookieStore.get('strava_expires_at')?.value,
+  //       expires_in: cookieStore.get('strava_expires_in')?.value,
+  //       refresh_token: cookieStore.get('strava_refresh_token')?.value,
+  //     }
+  //   }
 
-    Object.entries(response).forEach(([key, value]) => {
-      cookieStore.set(`strava_${key}`, JSON.stringify(value), {
-        ...cookieOptions,
-        maxAge: response.expires_in,
-      })
-    })
+  //   console.log('Session is expired, refreshing')
+  //   const response = await fetchStravaToken<StravaSessionRefreshResponse>({
+  //     client_id: STRAVA_CLIENT_ID,
+  //     client_secret: STRAVA_CLIENT_SECRET,
+  //     refresh_token: refreshToken.value,
+  //     grant_type: 'refresh_token',
+  //   })
 
-    return response
-  }
+  //   Object.entries(response).forEach(([key, value]) => {
+  //     cookieStore.set(`strava_${key}`, JSON.stringify(value), {
+  //       ...cookieOptions,
+  //       maxAge: response.expires_in,
+  //     })
+  //   })
+
+  //   return response
+  // }
 
   const getAthlete = async () => {
-    const token = cookieStore.get("strava_access_token")
+    const token = cookieStore.get('strava_access_token')
     if (!token || isSessionExpired()) return null
     return await fetch(`${STRAVA_API_URL}/athlete`, {
       headers: {
@@ -152,16 +144,16 @@ const createStravaClient = () => {
   }
 
   const signOut = () => {
-    cookieStore.delete("strava_access_token")
-    cookieStore.delete("strava_expires_at")
-    cookieStore.delete("strava_refresh_token")
-    cookieStore.delete("strava_token_type")
-    cookieStore.delete("strava_expires_in")
+    cookieStore.delete('strava_access_token')
+    cookieStore.delete('strava_expires_at')
+    cookieStore.delete('strava_refresh_token')
+    cookieStore.delete('strava_token_type')
+    cookieStore.delete('strava_expires_in')
   }
 
   return {
     exchangeCodeForSession,
-    refreshSession,
+    // refreshSession,
     getAthlete,
     isSessionExpired,
     signOut,

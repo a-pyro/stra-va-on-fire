@@ -1,22 +1,23 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { type ComponentProps } from "react"
-import { useFormStatus } from "react-dom"
+import { type ComponentProps } from 'react'
+import { useFormStatus } from 'react-dom'
+
+import { Button } from '@/components/ui/button'
 
 type Props = ComponentProps<typeof Button> & {
   pendingText?: string
 }
 
-export function SubmitButton({
+export const SubmitButton = ({
   children,
-  pendingText = "Submitting...",
+  pendingText = 'Submitting...',
   ...props
-}: Props) {
+}: Props) => {
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" aria-disabled={pending} {...props}>
+    <Button aria-disabled={pending} type="submit" {...props}>
       {pending ? pendingText : children}
     </Button>
   )

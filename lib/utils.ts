@@ -1,16 +1,16 @@
-import { clsx, type ClassValue } from "clsx"
-import { redirect } from "next/navigation"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { redirect } from 'next/navigation'
+import { twMerge } from 'tailwind-merge'
 
 /**
  * Builds a path with an encoded message as a query parameter.
- * @param {('error' | 'success')} type - The type of message, either 'error' or 'success'.
- * @param {string} path - The base path to append the query parameter to.
- * @param {string} message - The message to be encoded and added as a query parameter.
- * @returns {string} The constructed path with the encoded message.
+ * @param type - The type of message, either 'error' or 'success'.
+ * @param  path - The base path to append the query parameter to.
+ * @param  message - The message to be encoded and added as a query parameter.
+ * @returns  The constructed path with the encoded message.
  */
 export function buildPathWithMessage(
-  type: "error" | "success",
+  type: 'error' | 'success',
   path: string,
   message: string,
 ): string {
@@ -19,13 +19,13 @@ export function buildPathWithMessage(
 
 /**
  * Redirects to a specified path with an encoded message as a query parameter.
- * @param {('error' | 'success')} type - The type of message, either 'error' or 'success'.
- * @param {string} path - The path to redirect to.
- * @param {string} message - The message to be encoded and added as a query parameter.
- * @returns {never} This function doesn't return as it triggers a redirect.
+ * @param  type - The type of message, either 'error' or 'success'.
+ * @param  path - The path to redirect to.
+ * @param  message - The message to be encoded and added as a query parameter.
+ * @returns  This function doesn't return as it triggers a redirect.
  */
 export function encodedRedirect(
-  type: "error" | "success",
+  type: 'error' | 'success',
   path: string,
   message: string,
 ) {

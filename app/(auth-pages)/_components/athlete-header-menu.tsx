@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button"
-import { createStravaClient } from "@/lib/strava/client"
+import { UserCircle } from 'lucide-react'
+import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { UserCircle } from "lucide-react"
-import Link from "next/link"
-import { SignInWithStravaButton } from "./sign-in-with-strava-button"
+} from '@/components/ui/dropdown-menu'
+import { createStravaClient } from '@/lib/strava/client'
+
+import { SignInWithStravaButton } from './sign-in-with-strava-button'
 
 export const AthleteHeaderMenu = async () => {
   const athlete = await createStravaClient().getAthlete()
@@ -22,14 +23,14 @@ export const AthleteHeaderMenu = async () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button className="relative h-8 w-8 rounded-full" variant="ghost">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={athlete.profile} alt={athlete.firstname} />
+            <AvatarImage alt={athlete.firstname} src={athlete.profile} />
             <AvatarFallback>{athlete.firstname[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent forceMount align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">

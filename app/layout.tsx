@@ -1,29 +1,26 @@
-import HeaderAuth from "@/app/(auth-pages)/_components/header-auth"
-import { ThemeSwitcher } from "@/components/theme-switcher"
-import { GeistSans } from "geist/font/sans"
-import type { Metadata } from "next"
-import { ThemeProvider } from "next-themes"
+import { GeistSans } from 'geist/font/sans'
+import type { Metadata } from 'next'
+import { ThemeProvider } from 'next-themes'
 
-import "./globals.css"
+import { AuthButton as HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
+import { ThemeSwitcher } from '@/components/theme-switcher'
+
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Hot Strava",
-  description: "The hottest Strava client on the web",
+  title: 'Hot Strava',
+  description: 'The hottest Strava client on the web',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" suppressHydrationWarning className={GeistSans.className}>
+    <html suppressHydrationWarning className={GeistSans.className} lang="en">
       <body className="antialiased">
         <ThemeProvider
+          disableTransitionOnChange
+          enableSystem
           attribute="class"
           defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
         >
           <main className="flex min-h-screen flex-col items-center">
             <div className="flex w-full flex-1 flex-col items-center gap-20">
@@ -49,3 +46,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+export default RootLayout

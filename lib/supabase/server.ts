@@ -1,7 +1,10 @@
-import { createServerClient as supaCreateServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
-import { envVars } from "../env-vars"
-import { Database } from "./generated-types"
+import { createServerClient as supaCreateServerClient } from '@supabase/ssr'
+import { type ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
+import { cookies } from 'next/headers'
+
+import { envVars } from '../env-vars'
+
+import { type Database } from './generated-types'
 
 export const createServerSideClient = () => {
   const cookieStore = cookies()
@@ -17,7 +20,7 @@ export const createServerSideClient = () => {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options as Partial<ResponseCookie>)
             })
           } catch (error) {
             // The `set` method was called from a Server Component.
