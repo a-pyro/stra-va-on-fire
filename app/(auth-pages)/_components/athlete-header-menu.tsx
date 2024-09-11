@@ -12,25 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserCircle } from "lucide-react"
 import Link from "next/link"
-import { signInWithStravaAction } from "../actions"
+import { SignInWithStravaButton } from "./sign-in-with-strava-button"
 
 export const AthleteHeaderMenu = async () => {
   const athlete = await createStravaClient().getAthlete()
 
-  if (!athlete) {
-    return (
-      <form>
-        <Button
-          type="submit"
-          formAction={signInWithStravaAction}
-          variant="outline"
-          size="sm"
-        >
-          Connect Strava Account
-        </Button>
-      </form>
-    )
-  }
+  if (!athlete) return <SignInWithStravaButton />
 
   return (
     <DropdownMenu>

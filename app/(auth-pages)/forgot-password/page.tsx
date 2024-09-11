@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { forgotPasswordAction } from "../actions"
-import { SmtpMessage } from "../smtp-message"
+import { SmtpMessage } from "../aler"
 
 export default function ForgotPassword({
   searchParams,

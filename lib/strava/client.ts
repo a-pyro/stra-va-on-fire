@@ -159,22 +159,11 @@ const createStravaClient = () => {
     cookieStore.delete("strava_expires_in")
   }
 
-  const getSession = () => {
-    const token = cookieStore.get("strava_access_token")
-
-    if (!token) return signInWithStravaAction()
-
-    return {
-      access_token: token.value,
-    }
-  }
-
   return {
     exchangeCodeForSession,
     refreshSession,
     getAthlete,
     isSessionExpired,
-    getSession,
     signOut,
   }
 }

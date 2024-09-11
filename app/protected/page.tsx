@@ -1,9 +1,13 @@
 import { TypographyH2 } from "@/components/typography"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { envVars } from "@/lib/env-vars"
 import { getStravaCallbackUrl } from "@/lib/strava"
+import { createStravaClient } from "@/lib/strava/client"
+import { SignInWithStravaButton } from "../(auth-pages)/_components/sign-in-with-strava-button"
 
 export default async function Page() {
+  const athlete = await createStravaClient().getAthlete()
   const subscribeStravaWebhookAction = async () => {
     "use server"
 
@@ -29,6 +33,19 @@ export default async function Page() {
       console.error("Failed to create subscription:", await response.json())
     }
   }
+
+  if (!athlete)
+    return (
+      <div className="flex h-full flex-1 flex-col">
+        <Alert className="flex flex-1 flex-col gap-2">
+          <AlertTitle>Login with strava first</AlertTitle>
+          <AlertDescription>
+            You must login with Strava in order to activate activity tracking.
+          </AlertDescription>
+          <SignInWithStravaButton className="mt-2 w-full" />
+        </Alert>
+      </div>
+    )
 
   return (
     <div className="flex h-full flex-1 flex-col">
