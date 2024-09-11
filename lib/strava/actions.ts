@@ -34,14 +34,17 @@ export const subscribeStravaWebhookAction = async () => {
     body,
   })
 
-  if (!response.ok)
-    return encodedRedirect(
+  if (!response.ok) {
+    encodedRedirect(
       'error',
       '/protected',
       parseStravaError((await response.json()) as StravaError),
     )
+    return { message: `Failed to subscribe to Strava webhooks` }
+  }
 
   revalidatePath('/protected')
+  return { message: `Successfully subscribed to Strava webhooks` }
 }
 
 export const revokeStravaWebhookAction = async () => {
@@ -53,14 +56,17 @@ export const revokeStravaWebhookAction = async () => {
     method: 'DELETE',
   })
 
-  if (!response.ok)
-    return encodedRedirect(
+  if (!response.ok) {
+    encodedRedirect(
       'error',
       '/protected',
       parseStravaError((await response.json()) as StravaError),
     )
+    return { message: `Failed to unsubscribe from Strava webhooks` }
+  }
 
   revalidatePath('/protected')
+  return { message: `Successfully unsubscribed from Strava webhooks` }
 }
 
 /* 

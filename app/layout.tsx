@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 
-import { AuthButton as HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
+import { HeaderAuth as HeaderAuth } from '@/app/(auth-pages)/_components/header-auth'
 import { ThemeSwitcher } from '@/components/theme-switcher'
 
 import './globals.css'
