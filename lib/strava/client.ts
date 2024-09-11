@@ -82,7 +82,7 @@ const createStravaClient = () => {
     })
 
     Object.entries(rest).forEach(([key, value]) => {
-      cookieStore.set(`strava_${key}`, JSON.stringify(value), {
+      cookieStore.set(`strava_${key}`, `${value}`, {
         ...cookieOptions,
         maxAge: rest.expires_in,
       })
@@ -138,7 +138,7 @@ const createStravaClient = () => {
     if (!token || isSessionExpired()) return null
     return await fetch(`${STRAVA_API_URL}/athlete`, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(token.value)}`,
+        Authorization: `Bearer ${token.value}`,
       },
     }).then(async (res) => (await res.json()) as StravaAthlete)
   }
