@@ -11,6 +11,7 @@ import { createStravaClient } from '@/lib/strava/client'
 
 import { SignInWithStravaButton } from '../(auth-pages)/_components/sign-in-with-strava-button'
 
+// TODO - move revoke to another page -- add loading state
 const Page = async ({ searchParams }: { searchParams?: Message }) => {
   const athlete = await createStravaClient().getAthlete()
   const subscriptions = await getStravaSubscriptions()
@@ -19,9 +20,9 @@ const Page = async ({ searchParams }: { searchParams?: Message }) => {
     return (
       <div className="flex h-full flex-1 flex-col">
         <Alert className="flex flex-1 flex-col gap-2">
-          <AlertTitle>Login with strava first</AlertTitle>
+          <AlertTitle>Connect with Strava</AlertTitle>
           <AlertDescription>
-            You must login with Strava in order to activate activity tracking.
+            To enable activity tracking, please log in with your Strava account.
           </AlertDescription>
           <SignInWithStravaButton className="mt-2 w-full" />
         </Alert>
@@ -31,24 +32,24 @@ const Page = async ({ searchParams }: { searchParams?: Message }) => {
   return (
     <>
       <div className="flex h-full flex-1 flex-col">
-        <TypographyH2>Acitivy tracking</TypographyH2>
+        <TypographyH2>Activity Tracking</TypographyH2>
         {subscriptions.length === 0 && (
           <form action={subscribeStravaWebhookAction}>
             <Button className="w-full" type="submit">
-              Activate
+              Enable Activity Tracking
             </Button>
           </form>
         )}
 
         {subscriptions.length > 0 && (
           <Alert className="flex flex-1 flex-col gap-2">
-            <AlertTitle>Activity tracking is active</AlertTitle>
+            <AlertTitle>Activity Tracking Enabled</AlertTitle>
             <AlertDescription>
-              You are currently tracking activities from Strava
+              Your activities from Strava are being tracked.
             </AlertDescription>
             <form action={revokeStravaWebhookAction}>
               <Button className="w-full" type="submit" variant="destructive">
-                Revoke access
+                Disable Activity Tracking
               </Button>
             </form>
           </Alert>
