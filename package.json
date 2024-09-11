@@ -8,11 +8,13 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
+    "format": "prettier --write .",
     "check:all": "npm run typecheck && npm run lint",
     "add:component": "npx shadcn@latest add",
     "zodify": "npx supabase-to-zod --input lib/supabase/generated-types.ts --output lib/supabase/zod-schemas.ts",
     "gen:types": "npx supabase gen types typescript --project-id cpmmqltoyvtgbizjuogt > lib/supabase/generated-types.ts && npm run zodify",
-    "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i"
+    "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -48,6 +50,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.8",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.5",
     "lint-staged": "^15.2.10",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
