@@ -28,9 +28,9 @@ export default async function Page() {
     })
 
     if (response.ok) {
-      console.log("Subscription created successfully:", await response.json())
+      console.log("Subsc ription created successfully:", await response.json())
     } else {
-      console.error("Failed to create subscription:", await response.json())
+      console.error("Failed to createsubscription:", await response.json())
     }
   }
 
