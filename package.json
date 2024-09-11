@@ -9,6 +9,7 @@
     "dev": "next dev",
     "format": "prettier --write .",
     "gen:types": "npx supabase gen types typescript --project-id cpmmqltoyvtgbizjuogt > lib/supabase/generated-types.ts && npm run zodify",
+    "grok": "ngrok http http://localhost:8080",
     "lint": "next lint",
     "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i",
     "prepare": "husky",
