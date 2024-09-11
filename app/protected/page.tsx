@@ -1,10 +1,11 @@
 import { FormMessage, type Message } from '@/components/form-message'
+import { TypographyH2 } from '@/components/typography'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { subscribeStravaWebhookAction } from '@/lib/strava/actions'
 import { createStravaClient } from '@/lib/strava/client'
 
 import { SignInWithStravaButton } from '../(auth-pages)/_components/sign-in-with-strava-button'
-
-import { ActivateTrackingButton } from './_components/activate-tracking-button'
 
 const Page = async ({ searchParams }: { searchParams?: Message }) => {
   const athlete = await createStravaClient().getAthlete()
@@ -24,7 +25,14 @@ const Page = async ({ searchParams }: { searchParams?: Message }) => {
 
   return (
     <>
-      <ActivateTrackingButton />
+      <div className="flex h-full flex-1 flex-col">
+        <TypographyH2>Custom Acitity Messages</TypographyH2>
+        <form action={subscribeStravaWebhookAction}>
+          <Button className="w-full" type="submit">
+            Activate Tracking
+          </Button>
+        </form>
+      </div>
       {searchParams ? <FormMessage message={searchParams} /> : null}
     </>
   )
