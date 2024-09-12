@@ -18,7 +18,6 @@ export const signUpAction = async (formData: FormData) => {
   if (!email || !password) {
     return { error: 'Email and password are required' }
   }
-  // test
   const { error } = await supabase.auth.signUp({
     email,
     password,
