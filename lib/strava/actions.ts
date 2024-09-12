@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { envVars } from '../env-vars'
 import { encodedRedirect } from '../utils'
+import { envVars } from '../utils/env-vars'
 
 import { type StravaError } from './types'
 

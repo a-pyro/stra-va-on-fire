@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { type ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { envVars } from '../env-vars'
+import { envVars } from '../utils/env-vars'
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.

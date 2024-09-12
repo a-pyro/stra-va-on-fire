@@ -2,7 +2,7 @@ import { createServerClient as supaCreateServerClient } from '@supabase/ssr'
 import { type ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { cookies } from 'next/headers'
 
-import { envVars } from '../env-vars'
+import { envVars } from '../utils/env-vars'
 
 import { type Database } from './generated-types'
 

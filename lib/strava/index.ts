@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 
-import { envVars } from '../env-vars'
+import { envVars } from '../utils/env-vars'
 
 import { type StravaError, type StravaWebookSubscriptionStatus } from './types'
 

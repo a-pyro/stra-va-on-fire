@@ -3,11 +3,11 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { envVars } from '@/lib/env-vars'
 import { getStravaCallbackUrl } from '@/lib/strava'
 import { createStravaClient } from '@/lib/strava/client'
 import { createServerSideClient } from '@/lib/supabase/server'
 import { encodedRedirect } from '@/lib/utils'
+import { envVars } from '@/lib/utils/env-vars'
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString()

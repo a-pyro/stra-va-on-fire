@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 
 import 'server-only'
-import { envVars } from '../env-vars'
+import { envVars } from '../utils/env-vars'
 
 import { type StravaAthlete, type StravaAuthResponse } from './types'
 

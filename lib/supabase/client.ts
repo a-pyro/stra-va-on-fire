@@ -1,6 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
 
-import { envVars } from '../env-vars'
+import { envVars } from '../utils/env-vars'
 
 import { type Database } from './generated-types'
 
