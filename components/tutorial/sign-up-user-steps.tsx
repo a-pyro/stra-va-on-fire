@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions -- not using this */
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 

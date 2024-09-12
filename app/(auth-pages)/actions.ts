@@ -13,7 +13,8 @@ export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString()
   const password = formData.get('password')?.toString()
   const supabase = createServerSideClient()
-  const origin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const origin = headers().get('origin')!
 
   if (!email || !password) {
     return { error: 'Email and password are required' }
@@ -31,7 +32,7 @@ export const signUpAction = async (formData: FormData) => {
     return encodedRedirect(
       'error',
       '/sign-up',
-      `${error.code} ${error.message}`,
+      `${error.code ?? ''} ${error.message}`,
     )
   }
   return encodedRedirect(
@@ -61,7 +62,8 @@ export const signInAction = async (formData: FormData) => {
 export const forgotPasswordAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString()
   const supabase = createServerSideClient()
-  const origin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const origin = headers().get('origin')!
   const callbackUrl = formData.get('callbackUrl')?.toString()
 
   if (!email) {
@@ -137,7 +139,8 @@ export const signOutAction = async () => {
 }
 
 export const signInWithGoogleAction = async () => {
-  const orgin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const orgin = headers().get('origin')!
   const supabase = createServerSideClient()
   const redirectTo = `${orgin}/auth/callback`
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -151,7 +154,7 @@ export const signInWithGoogleAction = async () => {
     return encodedRedirect(
       'error',
       '/sign-in',
-      `${error.code} ${error.message}`,
+      `${error.code ?? ''} ${error.message}`,
     )
 
   if (data.url) redirect(data.url)

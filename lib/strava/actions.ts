@@ -50,7 +50,11 @@ export const subscribeStravaWebhookAction = async () => {
 export const revokeStravaWebhookAction = async () => {
   const [subsciption] = await getStravaSubscriptions()
 
-  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions/${subsciption?.id}?client_id=${envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
+  if (!subsciption) {
+    return { message: `No Strava webhooks to unsubscribe from` }
+  }
+
+  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions/${subsciption.id.toString()}?client_id=${envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
 
   const response = await fetch(endpoint, {
     method: 'DELETE',

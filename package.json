@@ -12,6 +12,8 @@
     "grok": "ngrok http http://localhost:8080",
     "lint": "next lint",
     "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i",
+    "pnpm:clean": "rm -rf node_modules && rm -rf pnpm-lock.yaml && pnpm i",
+    "pi": "pnpm install",
     "prepare": "husky",
     "start": "next start",
     "type:check": "tsc --noEmit",

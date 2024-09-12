@@ -52,7 +52,7 @@ const createStravaClient = () => {
     })
 
     Object.entries(rest).forEach(([key, value]) => {
-      cookieStore.set(`strava_${key}`, `${value}`, {
+      cookieStore.set(`strava_${key}`, value.toString(), {
         ...cookieOptions,
         maxAge: rest.expires_in,
       })
