@@ -47,3 +47,21 @@ export type StravaAuthResponse = {
   access_token: string
   athlete: StravaAthlete
 }
+
+export type StravaWebhookEvent = {
+  aspect_type: 'create' | 'update' | 'delete'
+  event_time: number
+  /** long integer	For activity events, the activity's ID. For athlete events, the athlete's ID.  */
+  object_id: number
+  object_type: 'activity' | 'athlete'
+  /** The athlete's ID. */
+  owner_id: number
+  /** The push subscription ID that is receiving this event. */
+  subscription_id: number
+  /* hash	For activity update events, keys can contain "title," "type," and "private," which is always "true" (activity visibility set to Only You) or "false" (activity visibility set to Followers Only or Everyone). For app deauthorization events, there is always an "authorized" : "false" key-value pair.*  */
+  updates: {
+    title?: string
+    type?: string
+    private?: boolean
+  }
+}

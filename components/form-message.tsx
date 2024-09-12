@@ -3,7 +3,8 @@ export type Message =
   | { error: string }
   | { message: string }
 
-export const FormMessage = ({ message }: { message: Message }) => {
+export const FormMessage = ({ message }: { message?: Message }) => {
+  if (!message) return null
   return (
     <div className="flex w-full max-w-md flex-col gap-2 text-sm">
       {'success' in message && (
