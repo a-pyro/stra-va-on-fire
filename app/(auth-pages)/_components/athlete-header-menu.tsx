@@ -52,3 +52,8 @@ export const AthleteHeaderMenu = async () => {
     </DropdownMenu>
   )
 }
+
+// fallback
+export const AthleteHeaderMenuFallback = () => (
+  <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
+)
