@@ -6,6 +6,8 @@ import { type StravaError, type StravaWebookSubscriptionStatus } from './types'
 
 export const getStravaCallbackUrl = () => {
   const origin = headers().get('origin')
+  if (!origin) throw new Error('Origin header is missing')
+
   return `${origin}/strava/callback`
 }
 

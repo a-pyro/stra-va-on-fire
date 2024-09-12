@@ -13,7 +13,8 @@ export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString()
   const password = formData.get('password')?.toString()
   const supabase = createServerSideClient()
-  const origin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const origin = headers().get('origin')!
 
   if (!email || !password) {
     return { error: 'Email and password are required' }
@@ -30,7 +31,7 @@ export const signUpAction = async (formData: FormData) => {
     return encodedRedirect(
       'error',
       '/sign-up',
-      `${error.code} ${error.message}`,
+      `${error.code ?? ''} ${error.message}`,
     )
   }
   return encodedRedirect(
@@ -60,7 +61,8 @@ export const signInAction = async (formData: FormData) => {
 export const forgotPasswordAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString()
   const supabase = createServerSideClient()
-  const origin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const origin = headers().get('origin')!
   const callbackUrl = formData.get('callbackUrl')?.toString()
 
   if (!email) {
@@ -136,7 +138,8 @@ export const signOutAction = async () => {
 }
 
 export const signInWithGoogleAction = async () => {
-  const orgin = headers().get('origin')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- origin is always present
+  const orgin = headers().get('origin')!
   const supabase = createServerSideClient()
   const redirectTo = `${orgin}/auth/callback`
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -150,12 +153,20 @@ export const signInWithGoogleAction = async () => {
     return encodedRedirect(
       'error',
       '/sign-in',
-      `${error.code} ${error.message}`,
+      `${error.code ?? ''} ${error.message}`,
     )
 
   if (data.url) redirect(data.url)
 }
 
+
+// read: read public segments, public routes, public profile data, public posts, public events, club feeds, and leaderboards
+// read_all:read private routes, private segments, and private events for the user
+// profile:read_all: read all profile information even if the user has set their profile visibility to Followers or Only You
+// profile:write: update the user's weight and Functional Threshold Power (FTP), and access to star or unstar segments on their behalf
+// activity:read: read the user's activity data for activities that are visible to Everyone and Followers, excluding privacy zone data
+// activity:read_all: the same access as activity:read, plus privacy zone data and access to read the user's activities with visibility set to Only You
+// activity:write: access to create manual activities and uploads, and access to edit any activities that are visible to the app, based on activity read access level
 const AUTHORIZATION_SCOPES = [
   'read',
   'read_all',
@@ -167,7 +178,7 @@ const AUTHORIZATION_SCOPES = [
 ] as const
 
 export const signInWithStravaAction = () => {
-  const stravaAuthUrl = envVars.NEXT_PUBLIC_STRAVA_AUTH_URL
+  const stravaAuthUrl = `${envVars.NEXT_PUBLIC_STRAVA_AUTH_URL}/authorize`
   const stravaClientId = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
   const redirectUri = getStravaCallbackUrl()
   const scopes = AUTHORIZATION_SCOPES.join(',')

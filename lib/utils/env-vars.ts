@@ -5,6 +5,7 @@ export const envVars = createEnv({
   server: {
     STRAVA_CLIENT_SECRET: z.string().min(1),
     STRAVA_VERIFY_TOKEN: z.string().min(1),
+    STRAVA_ACCESS_TOKEN: z.string().min(1),
   },
 
   /**
@@ -19,7 +20,6 @@ export const envVars = createEnv({
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_AUTH_URL: z.string().url(),
-    NEXT_PUBLIC_STRAVA_TOKEN_URL: z.string().url(),
     NEXT_PUBLIC_STRAVA_API_URL: z.string().url(),
   },
 
