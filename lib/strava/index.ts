@@ -2,7 +2,10 @@ import { headers } from 'next/headers'
 
 import { envVars } from '../utils/env-vars'
 
-import { type StravaError, type StravaWebookSubscriptionStatus } from './types'
+import {
+  type StravaApiError,
+  type StravaWebookSubscriptionStatus,
+} from './types'
 
 export const getStravaCallbackUrl = () => {
   const origin = headers().get('origin')
@@ -11,7 +14,7 @@ export const getStravaCallbackUrl = () => {
   return `${origin}/strava/callback`
 }
 
-export const parseStravaError = ({ errors, message }: StravaError) => {
+export const parseStravaError = ({ errors, message }: StravaApiError) => {
   return `${message}: ${errors
     .map(
       ({ resource, code, field }) =>
@@ -23,7 +26,7 @@ export const parseStravaError = ({ errors, message }: StravaError) => {
 export const getStravaSubscriptions = async (): Promise<
   StravaWebookSubscriptionStatus[]
 > => {
-  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions?client_id=${envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
+  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions?client_id=${envVars.STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
   const response = await fetch(endpoint)
   return response.json() as Promise<StravaWebookSubscriptionStatus[]>
 }

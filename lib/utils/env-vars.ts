@@ -1,24 +1,23 @@
-import { createEnv } from "@t3-oss/env-core"
-import { z } from "zod"
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const envVars = createEnv({
   server: {
     STRAVA_CLIENT_SECRET: z.string().min(1),
     STRAVA_VERIFY_TOKEN: z.string().min(1),
-    STRAVA_ACCESS_TOKEN: z.string().min(1),
+    STRAVA_CLIENT_ID: z.string().min(1),
   },
 
   /**
    * The prefix that client-side variables must have. This is enforced both at
    * a type-level and at runtime.
    */
-  clientPrefix: "NEXT_PUBLIC_",
+  clientPrefix: 'NEXT_PUBLIC_',
 
   client: {
     NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().min(1),
-    NEXT_PUBLIC_STRAVA_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_AUTH_URL: z.string().url(),
     NEXT_PUBLIC_STRAVA_API_URL: z.string().url(),
   },

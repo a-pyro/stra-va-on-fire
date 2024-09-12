@@ -10,7 +10,7 @@ const Page = async ({ searchParams }: { searchParams?: Message }) => {
 
   if (!athlete)
     return (
-      <div className="flex h-full flex-1 flex-col">
+      <div className="flex h-full flex-1 flex-col gap-4">
         <Alert className="flex flex-1 flex-col gap-2">
           <AlertTitle>Connect with Strava</AlertTitle>
           <AlertDescription>
@@ -18,6 +18,7 @@ const Page = async ({ searchParams }: { searchParams?: Message }) => {
           </AlertDescription>
           <SignInWithStravaButton className="mt-2 w-full" />
         </Alert>
+        <FormMessage message={searchParams} />
       </div>
     )
   return <FormMessage message={searchParams} />
