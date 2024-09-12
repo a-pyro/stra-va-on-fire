@@ -1,4 +1,4 @@
-export type StravaError = {
+export type StravaApiError = {
   message: string
   errors: {
     resource: string
@@ -65,3 +65,9 @@ export type StravaWebhookEvent = {
     private?: boolean
   }
 }
+
+export const stravaEndpoints = {
+  athlete: 'athlete',
+} as const
+
+export type StravaEndpoint = keyof typeof stravaEndpoints

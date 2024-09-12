@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { encodedRedirect } from '../utils'
 import { envVars } from '../utils/env-vars'
 
-import { type StravaError } from './types'
+import { type StravaApiError } from './types'
 
 import {
   getStravaCallbackUrl,
@@ -13,11 +13,9 @@ import {
   parseStravaError,
 } from '.'
 
-// TODO MOVE THIS TO ANOTHER PAGE
-
 export const subscribeStravaWebhookAction = async () => {
   const formData = new URLSearchParams()
-  formData.append('client_id', envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID)
+  formData.append('client_id', envVars.STRAVA_CLIENT_ID)
   formData.append('client_secret', envVars.STRAVA_CLIENT_SECRET)
   formData.append('callback_url', getStravaCallbackUrl())
   formData.append('verify_token', envVars.STRAVA_VERIFY_TOKEN)
@@ -37,13 +35,13 @@ export const subscribeStravaWebhookAction = async () => {
   if (!response.ok) {
     encodedRedirect(
       'error',
-      '/protected',
-      parseStravaError((await response.json()) as StravaError),
+      '/admin',
+      parseStravaError((await response.json()) as StravaApiError),
     )
     return { message: `Failed to subscribe to Strava webhooks` }
   }
 
-  revalidatePath('/protected')
+  revalidatePath('/admin')
   return { message: `Successfully subscribed to Strava webhooks` }
 }
 
@@ -54,7 +52,7 @@ export const revokeStravaWebhookAction = async () => {
     return { message: `No Strava webhooks to unsubscribe from` }
   }
 
-  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions/${subsciption.id.toString()}?client_id=${envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
+  const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions/${subsciption.id.toString()}?client_id=${envVars.STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
 
   const response = await fetch(endpoint, {
     method: 'DELETE',
@@ -63,13 +61,13 @@ export const revokeStravaWebhookAction = async () => {
   if (!response.ok) {
     encodedRedirect(
       'error',
-      '/protected',
-      parseStravaError((await response.json()) as StravaError),
+      '/admin',
+      parseStravaError((await response.json()) as StravaApiError),
     )
     return { message: `Failed to unsubscribe from Strava webhooks` }
   }
 
-  revalidatePath('/protected')
+  revalidatePath('/admin')
   return { message: `Successfully unsubscribed from Strava webhooks` }
 }
 

@@ -1,28 +1,15 @@
 import { cookies } from 'next/headers'
 
 import 'server-only'
+
 import { envVars } from '../utils/env-vars'
 
-import { type StravaAthlete, type StravaAuthResponse } from './types'
-import { getStravaCallbackUrl } from '.';
-import strava from 'strava-v3';
-
-strava.config({
-  client_id: envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID,
-  client_secret: envVars.STRAVA_CLIENT_SECRET,
-  redirect_uri: getStravaCallbackUrl(),
-  access_token: envVars.STRAVA_ACCESS_TOKEN,
-})
-
-
-
-
-const {
-  NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,
-  STRAVA_CLIENT_SECRET,
-  NEXT_PUBLIC_STRAVA_AUTH_URL: STRAVA_TOKEN_URL,
-  NEXT_PUBLIC_STRAVA_API_URL: STRAVA_API_URL,
-} = envVars
+import {
+  type StravaAthlete,
+  type StravaAuthResponse,
+  type StravaEndpoint,
+  stravaEndpoints,
+} from './types'
 
 const cookieOptions = {
   httpOnly: true,
@@ -33,7 +20,7 @@ const cookieOptions = {
 const fetchStravaToken = async <T>(
   params: Record<string, string>,
 ): Promise<T> => {
-  const url = new URL(`${STRAVA_TOKEN_URL}/token`)
+  const url = new URL(`${envVars.NEXT_PUBLIC_STRAVA_AUTH_URL}/token`)
   Object.entries(params).forEach(([key, value]) => {
     url.searchParams.append(key, value)
   })
@@ -42,6 +29,7 @@ const fetchStravaToken = async <T>(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
   })
+
   return response.json() as Promise<T>
 }
 
@@ -51,12 +39,14 @@ const createStravaClient = () => {
   const exchangeCodeForSession = async (
     code: string,
   ): Promise<Omit<StravaAuthResponse, 'athlete' | 'token_type'>> => {
-    const { athlete: _, ...rest } = await fetchStravaToken<StravaAuthResponse>({
-      client_id: STRAVA_CLIENT_ID,
-      client_secret: STRAVA_CLIENT_SECRET,
+    const response = await fetchStravaToken<StravaAuthResponse>({
+      client_id: envVars.STRAVA_CLIENT_ID,
+      client_secret: envVars.STRAVA_CLIENT_SECRET,
       code,
       grant_type: 'authorization_code',
     })
+
+    const { athlete: _, ...rest } = response
 
     Object.entries(rest).forEach(([key, value]) => {
       cookieStore.set(`strava_${key}`, value.toString(), {
@@ -74,50 +64,24 @@ const createStravaClient = () => {
     return Number(expiresAt.value) * 1000 < Date.now()
   }
 
-  // const refreshSession = async () => {
-  //   const refreshToken = cookieStore.get('strava_refresh_token')
-  //   // first time sign in or session has been cleared
-  //   if (!refreshToken) return signInWithStravaAction()
-
-  //   const isExpired = isSessionExpired()
-
-  //   if (!isExpired) {
-  //     console.log('Session is not expired, no need to refresh')
-
-  //     return {
-  //       access_token: cookieStore.get('strava_access_token')?.value,
-  //       expires_at: cookieStore.get('strava_expires_at')?.value,
-  //       expires_in: cookieStore.get('strava_expires_in')?.value,
-  //       refresh_token: cookieStore.get('strava_refresh_token')?.value,
-  //     }
-  //   }
-
-  //   console.log('Session is expired, refreshing')
-  //   const response = await fetchStravaToken<StravaSessionRefreshResponse>({
-  //     client_id: STRAVA_CLIENT_ID,
-  //     client_secret: STRAVA_CLIENT_SECRET,
-  //     refresh_token: refreshToken.value,
-  //     grant_type: 'refresh_token',
-  //   })
-
-  //   Object.entries(response).forEach(([key, value]) => {
-  //     cookieStore.set(`strava_${key}`, JSON.stringify(value), {
-  //       ...cookieOptions,
-  //       maxAge: response.expires_in,
-  //     })
-  //   })
-
-  //   return response
-  // }
-
-  const getAthlete = async () => {
+  const fetchStravaApi = async <T>(
+    endpoint: StravaEndpoint,
+  ): Promise<T | null> => {
     const token = cookieStore.get('strava_access_token')
     if (!token || isSessionExpired()) return null
-    return await fetch(`${STRAVA_API_URL}/athlete`, {
+
+    const url = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/${stravaEndpoints[endpoint]}`
+    const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
-    }).then(async (res) => (await res.json()) as StravaAthlete)
+    })
+
+    return response.json() as Promise<T>
+  }
+
+  const getAthlete = async () => {
+    return fetchStravaApi<StravaAthlete>('athlete')
   }
 
   const signOut = () => {
@@ -128,9 +92,9 @@ const createStravaClient = () => {
     cookieStore.delete('strava_expires_in')
   }
 
+  // TODO - implement deauthorization
   return {
     exchangeCodeForSession,
-    // refreshSession,
     getAthlete,
     isSessionExpired,
     signOut,

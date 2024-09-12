@@ -134,7 +134,7 @@ export const signOutAction = async () => {
   const strava = createStravaClient()
   strava.signOut()
   await supabase.auth.signOut()
-  return redirect('/sign-in')
+  redirect('/sign-in')
 }
 
 export const signInWithGoogleAction = async () => {
@@ -150,15 +150,10 @@ export const signInWithGoogleAction = async () => {
   })
 
   if (error)
-    return encodedRedirect(
-      'error',
-      '/sign-in',
-      `${error.code ?? ''} ${error.message}`,
-    )
+    encodedRedirect('error', '/sign-in', `${error.code ?? ''} ${error.message}`)
 
   if (data.url) redirect(data.url)
 }
-
 
 // read: read public segments, public routes, public profile data, public posts, public events, club feeds, and leaderboards
 // read_all:read private routes, private segments, and private events for the user
@@ -179,7 +174,7 @@ const AUTHORIZATION_SCOPES = [
 
 export const signInWithStravaAction = () => {
   const stravaAuthUrl = `${envVars.NEXT_PUBLIC_STRAVA_AUTH_URL}/authorize`
-  const stravaClientId = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
+  const stravaClientId = envVars.STRAVA_CLIENT_ID
   const redirectUri = getStravaCallbackUrl()
   const scopes = AUTHORIZATION_SCOPES.join(',')
   const approvalPrompt = 'force'

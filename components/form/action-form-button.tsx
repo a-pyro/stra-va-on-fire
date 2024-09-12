@@ -5,15 +5,19 @@ import { Button, type ButtonProps } from '../ui/button'
 
 type ActionFormButtonProps = Omit<ButtonProps, 'asChild' | 'type'>
 
-// TODO this doesnt seems to be working
-
-export const ActionFormButton = (props: ActionFormButtonProps) => {
+export const FormButtonPending = (props: ActionFormButtonProps) => {
   const { pending } = useFormStatus()
   return (
+    <Button {...props} disabled={pending} type="submit">
+      {pending ? '🚀🚀🚀' : null} {props.children}
+    </Button>
+  )
+}
+
+export const ActionFormButton = (props: ActionFormButtonProps) => {
+  return (
     <form>
-      <Button {...props} disabled={pending} type="submit">
-        {pending ? '🚀🚀🚀' : null} {props.children}
-      </Button>
+      <FormButtonPending {...props} />
     </form>
   )
 }
