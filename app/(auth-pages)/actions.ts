@@ -171,7 +171,7 @@ const AUTHORIZATION_SCOPES = [
 ] as const
 
 export const signInWithStravaAction = () => {
-  const stravaAuthUrl = envVars.NEXT_PUBLIC_STRAVA_AUTH_URL
+  const stravaAuthUrl = `${envVars.NEXT_PUBLIC_STRAVA_AUTH_URL}/authorize`
   const stravaClientId = envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID
   const redirectUri = getStravaCallbackUrl()
   const scopes = AUTHORIZATION_SCOPES.join(',')

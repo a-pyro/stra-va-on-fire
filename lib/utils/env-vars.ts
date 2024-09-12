@@ -19,7 +19,6 @@ export const envVars = createEnv({
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_CLIENT_ID: z.string().min(1),
     NEXT_PUBLIC_STRAVA_AUTH_URL: z.string().url(),
-    NEXT_PUBLIC_STRAVA_TOKEN_URL: z.string().url(),
     NEXT_PUBLIC_STRAVA_API_URL: z.string().url(),
   },
 

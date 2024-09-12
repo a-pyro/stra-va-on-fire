@@ -13,7 +13,7 @@ import { type StravaAthlete, type StravaAuthResponse } from './types'
 const {
   NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,
   STRAVA_CLIENT_SECRET,
-  NEXT_PUBLIC_STRAVA_TOKEN_URL: STRAVA_TOKEN_URL,
+  NEXT_PUBLIC_STRAVA_AUTH_URL: STRAVA_TOKEN_URL,
   NEXT_PUBLIC_STRAVA_API_URL: STRAVA_API_URL,
 } = envVars
 
@@ -26,7 +26,7 @@ const cookieOptions = {
 const fetchStravaToken = async <T>(
   params: Record<string, string>,
 ): Promise<T> => {
-  const url = new URL(STRAVA_TOKEN_URL)
+  const url = new URL(`${STRAVA_TOKEN_URL}/token`)
   Object.entries(params).forEach(([key, value]) => {
     url.searchParams.append(key, value)
   })
