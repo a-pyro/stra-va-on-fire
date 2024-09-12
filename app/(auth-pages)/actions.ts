@@ -160,6 +160,14 @@ export const signInWithGoogleAction = async () => {
   if (data.url) redirect(data.url)
 }
 
+
+// read: read public segments, public routes, public profile data, public posts, public events, club feeds, and leaderboards
+// read_all:read private routes, private segments, and private events for the user
+// profile:read_all: read all profile information even if the user has set their profile visibility to Followers or Only You
+// profile:write: update the user's weight and Functional Threshold Power (FTP), and access to star or unstar segments on their behalf
+// activity:read: read the user's activity data for activities that are visible to Everyone and Followers, excluding privacy zone data
+// activity:read_all: the same access as activity:read, plus privacy zone data and access to read the user's activities with visibility set to Only You
+// activity:write: access to create manual activities and uploads, and access to edit any activities that are visible to the app, based on activity read access level
 const AUTHORIZATION_SCOPES = [
   'read',
   'read_all',

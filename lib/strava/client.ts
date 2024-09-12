@@ -4,11 +4,18 @@ import 'server-only'
 import { envVars } from '../utils/env-vars'
 
 import { type StravaAthlete, type StravaAuthResponse } from './types'
+import { getStravaCallbackUrl } from '.';
+import strava from 'strava-v3';
 
-// type StravaSessionRefreshResponse = Omit<
-//   StravaAuthResponse,
-//   'athlete' | 'token_type'
-// >
+strava.config({
+  client_id: envVars.NEXT_PUBLIC_STRAVA_CLIENT_ID,
+  client_secret: envVars.STRAVA_CLIENT_SECRET,
+  redirect_uri: getStravaCallbackUrl(),
+  access_token: envVars.STRAVA_ACCESS_TOKEN,
+})
+
+
+
 
 const {
   NEXT_PUBLIC_STRAVA_CLIENT_ID: STRAVA_CLIENT_ID,

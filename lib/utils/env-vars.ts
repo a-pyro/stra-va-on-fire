@@ -5,6 +5,7 @@ export const envVars = createEnv({
   server: {
     STRAVA_CLIENT_SECRET: z.string().min(1),
     STRAVA_VERIFY_TOKEN: z.string().min(1),
+    STRAVA_ACCESS_TOKEN: z.string().min(1),
   },
 
   /**
