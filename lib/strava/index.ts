@@ -30,7 +30,7 @@ export const getStravaSubscriptions = async (): Promise<
   StravaWebookSubscriptionStatus[]
 > => {
   const endpoint = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/push_subscriptions?client_id=${envVars.STRAVA_CLIENT_ID}&client_secret=${envVars.STRAVA_CLIENT_SECRET}`
-  const response = await fetch(endpoint)
+  const response = await fetch(endpoint, { cache: 'no-store' })
   return response.json() as Promise<StravaWebookSubscriptionStatus[]>
 }
 
