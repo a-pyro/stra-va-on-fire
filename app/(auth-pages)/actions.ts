@@ -4,7 +4,6 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { getStravaCallbackUrl } from '@/lib/strava'
-import { createStravaClient } from '@/lib/strava/client'
 import { createServerSideClient } from '@/lib/supabase/server'
 import { encodedRedirect } from '@/lib/utils'
 import { envVars } from '@/lib/utils/env-vars'
@@ -131,8 +130,6 @@ export const resetPasswordAction = async (formData: FormData) => {
 
 export const signOutAction = async () => {
   const supabase = createServerSideClient()
-  const strava = createStravaClient()
-  strava.signOut()
   await supabase.auth.signOut()
   redirect('/sign-in')
 }

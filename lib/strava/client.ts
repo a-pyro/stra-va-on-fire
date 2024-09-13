@@ -140,22 +140,10 @@ const getAthlete = async () => {
   return fetchStravaApi<StravaAthlete>('athlete')
 }
 
-const signOut = () => {
-  const cookieStore = cookies()
-  cookieStore.delete('strava_access_token')
-  cookieStore.delete('strava_expires_at')
-  cookieStore.delete('strava_refresh_token')
-  cookieStore.delete('strava_token_type')
-  cookieStore.delete('strava_expires_in')
-}
-
-// TODO - implement deauthorization
-
 const stravaClient = {
   exchangeCodeForSession,
   getAthlete,
   isSessionExpired,
-  signOut,
   refreshToken,
 }
 
