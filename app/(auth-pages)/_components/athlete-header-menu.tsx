@@ -11,22 +11,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { createStravaClient } from '@/lib/strava/client'
+import { isStravaApiErrorResponse } from '@/lib/strava'
+import { stravaClient } from '@/lib/strava/client'
 
 import { SignInWithStravaButton } from './sign-in-with-strava-button'
 
-export const AthleteHeaderMenu = async () => {
-  const athlete = await createStravaClient().getAthlete()
 
-  if (!athlete) return <SignInWithStravaButton />
+export const AthleteHeaderMenu = async () => {
+  const response = await stravaClient.getAthlete()
+
+  if (isStravaApiErrorResponse(response)) return <SignInWithStravaButton />
+  
+
+  const { firstname, lastname, username, profile } = response
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="relative h-8 w-8 rounded-full" variant="ghost">
           <Avatar className="h-8 w-8">
-            <AvatarImage alt={athlete.firstname} src={athlete.profile} />
-            <AvatarFallback>{athlete.firstname[0]}</AvatarFallback>
+            <AvatarImage alt={firstname} src={profile} />
+            <AvatarFallback>{firstname[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -34,10 +39,10 @@ export const AthleteHeaderMenu = async () => {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {athlete.firstname} {athlete.lastname}
+              {firstname} {lastname}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              @{athlete.username}
+              @{username}
             </p>
           </div>
         </DropdownMenuLabel>

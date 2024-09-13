@@ -1,4 +1,4 @@
-export type StravaApiError = {
+export type StravaApiErrorResponse = {
   message: string
   errors: {
     resource: string
@@ -47,6 +47,11 @@ export type StravaAuthResponse = {
   access_token: string
   athlete: StravaAthlete
 }
+
+export type StravaRefreshTokenResponse = Pick<
+  StravaAuthResponse,
+  'access_token' | 'expires_at' | 'expires_in' | 'refresh_token'
+>
 
 export type StravaWebhookEvent = {
   aspect_type: 'create' | 'update' | 'delete'

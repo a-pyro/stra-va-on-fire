@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { envVars } from '../utils/env-vars'
 
 import {
-  type StravaApiError,
+  type StravaApiErrorResponse,
   type StravaWebookSubscriptionStatus,
 } from './types'
 
@@ -14,7 +14,10 @@ export const getStravaCallbackUrl = () => {
   return `${origin}/strava/callback`
 }
 
-export const parseStravaError = ({ errors, message }: StravaApiError) => {
+export const parseStravaError = ({
+  errors,
+  message,
+}: StravaApiErrorResponse) => {
   return `${message}: ${errors
     .map(
       ({ resource, code, field }) =>
@@ -30,3 +33,11 @@ export const getStravaSubscriptions = async (): Promise<
   const response = await fetch(endpoint)
   return response.json() as Promise<StravaWebookSubscriptionStatus[]>
 }
+
+
+export const isStravaApiErrorResponse = (
+  response: unknown,
+): response is StravaApiErrorResponse => {
+  return typeof response === 'object' && response !== null && 'message' in response
+}
+

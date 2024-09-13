@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { createStravaClient } from '@/lib/strava/client'
+import { stravaClient } from '@/lib/strava/client'
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
@@ -13,8 +13,7 @@ export async function GET(request: Request) {
 
   if (code) {
     // coming from sign in with Strava
-    const strava = createStravaClient()
-    await strava.exchangeCodeForSession(code)
+    await stravaClient.exchangeCodeForSession(code)
     return NextResponse.redirect(`${origin}/protected`)
   }
 

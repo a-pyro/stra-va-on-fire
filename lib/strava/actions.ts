@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { encodedRedirect } from '../utils'
 import { envVars } from '../utils/env-vars'
 
-import { type StravaApiError } from './types'
+import { type StravaApiErrorResponse } from './types'
 
 import {
   getStravaCallbackUrl,
@@ -36,7 +36,7 @@ export const subscribeStravaWebhookAction = async () => {
     encodedRedirect(
       'error',
       '/admin',
-      parseStravaError((await response.json()) as StravaApiError),
+      parseStravaError((await response.json()) as StravaApiErrorResponse),
     )
     return { message: `Failed to subscribe to Strava webhooks` }
   }
@@ -62,7 +62,7 @@ export const revokeStravaWebhookAction = async () => {
     encodedRedirect(
       'error',
       '/admin',
-      parseStravaError((await response.json()) as StravaApiError),
+      parseStravaError((await response.json()) as StravaApiErrorResponse),
     )
     return { message: `Failed to unsubscribe from Strava webhooks` }
   }
