@@ -1,6 +1,8 @@
+import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { stravaClient } from '@/lib/strava/client'
+import { type StravaWebhookEvent } from '@/lib/strava/types'
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
@@ -67,3 +69,12 @@ Example Request
     }
 }
 */
+
+export async function POST(request: Request) {
+  const cookieStore = cookies()
+  console.log({ cookieStore })
+  const event = (await request.json()) as StravaWebhookEvent
+  console.log({ event })
+  // return 200 to acknowledge the event
+  return NextResponse.json({ message: 'Event acknowledged' }, { status: 200 })
+}
