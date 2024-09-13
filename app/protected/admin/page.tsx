@@ -11,7 +11,8 @@ import {
 // TODO: hide this page and check for admin role
 const AdminPage = async ({ searchParams }: { searchParams?: Message }) => {
   const subscriptions = await getStravaSubscriptions()
-
+  // eslint-disable-next-line no-console -- debug
+  console.log({ subscriptions })
   return (
     <div className="flex h-full flex-1 flex-col">
       <TypographyH2>Activity Tracking</TypographyH2>

@@ -41,12 +41,15 @@ export const subscribeStravaWebhookAction = async () => {
     return { message: `Failed to subscribe to Strava webhooks` }
   }
 
-  revalidatePath('/admin')
+  revalidatePath('/protected/admin')
   return { message: `Successfully subscribed to Strava webhooks` }
 }
 
 export const revokeStravaWebhookAction = async () => {
   const [subsciption] = await getStravaSubscriptions()
+
+  // eslint-disable-next-line no-console -- debug
+  console.log({ subsciption })
 
   if (!subsciption) {
     return { message: `No Strava webhooks to unsubscribe from` }
@@ -61,13 +64,13 @@ export const revokeStravaWebhookAction = async () => {
   if (!response.ok) {
     encodedRedirect(
       'error',
-      '/admin',
+      '/protected/admin',
       parseStravaError((await response.json()) as StravaApiErrorResponse),
     )
     return { message: `Failed to unsubscribe from Strava webhooks` }
   }
 
-  revalidatePath('/admin')
+  revalidatePath('/protected/admin')
   return { message: `Successfully unsubscribed from Strava webhooks` }
 }
 
