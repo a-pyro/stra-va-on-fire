@@ -27,13 +27,10 @@ export const signUpAction = async (formData: FormData) => {
   })
 
   if (error) {
-    return encodedRedirect(
-      'error',
-      '/sign-up',
-      `${error.code ?? ''} ${error.message}`,
-    )
+    encodedRedirect('error', '/sign-up', `${error.code ?? ''} ${error.message}`)
+    return
   }
-  return encodedRedirect(
+  encodedRedirect(
     'success',
     '/sign-up',
     'Thanks for signing up! Please check your email for a verification link.',
@@ -51,7 +48,8 @@ export const signInAction = async (formData: FormData) => {
   })
 
   if (error) {
-    return encodedRedirect('error', '/sign-in', error.message)
+    encodedRedirect('error', '/sign-in', error.message)
+    return
   }
 
   return redirect('/protected')
@@ -65,26 +63,23 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const callbackUrl = formData.get('callbackUrl')?.toString()
 
   if (!email) {
-    return encodedRedirect('error', '/forgot-password', 'Email is required')
+    encodedRedirect('error', '/forgot-password', 'Email is required')
   }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we check for email above
+  const { error } = await supabase.auth.resetPasswordForEmail(email!, {
     redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
   })
 
   if (error) {
-    return encodedRedirect(
-      'error',
-      '/forgot-password',
-      'Could not reset password',
-    )
+    encodedRedirect('error', '/forgot-password', 'Could not reset password')
   }
 
   if (callbackUrl) {
     return redirect(callbackUrl)
   }
 
-  return encodedRedirect(
+  encodedRedirect(
     'success',
     '/forgot-password',
     'Check your email for a link to reset your password.',
