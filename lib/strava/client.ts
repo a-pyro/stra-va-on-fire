@@ -13,7 +13,7 @@ import {
   stravaEndpoints,
 } from './types'
 
-import { parseStravaError } from '.'
+import { isStravaApiErrorResponse, parseStravaError } from '.'
 
 const cookieOptions = {
   httpOnly: true,
@@ -110,6 +110,7 @@ const isSessionExpired = () => {
 const checkSession = async () => {
   const cookieStore = cookies()
   const stravaRefreshToken = cookieStore.get('strava_refresh_token')
+  const stravaAccessToken = cookieStore.get('strava_access_token')
 
   if (isSessionExpired() && stravaRefreshToken) {
     const accessToken = await refreshToken(stravaRefreshToken.value)
@@ -118,14 +119,24 @@ const checkSession = async () => {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- token exists
-  return cookieStore.get('strava_access_token')!.value
+  if (stravaAccessToken) {
+    return stravaAccessToken.value
+  }
+  const error: StravaApiErrorResponse = {
+    message: 'No session found',
+    errors: [{ resource: 'session', field: 'expired', code: 'expired' }],
+  }
+  return error
 }
 
 const fetchStravaApi = async <T>(
   endpoint: StravaEndpoint,
 ): Promise<T | StravaApiErrorResponse> => {
   const token = await checkSession()
+  if (isStravaApiErrorResponse(token)) {
+    return token
+  }
+
   const url = `${envVars.NEXT_PUBLIC_STRAVA_API_URL}/${stravaEndpoints[endpoint]}`
   const response = await fetch(url, {
     headers: {

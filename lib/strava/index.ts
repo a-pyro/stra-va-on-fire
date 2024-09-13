@@ -34,10 +34,10 @@ export const getStravaSubscriptions = async (): Promise<
   return response.json() as Promise<StravaWebookSubscriptionStatus[]>
 }
 
-
 export const isStravaApiErrorResponse = (
   response: unknown,
 ): response is StravaApiErrorResponse => {
-  return typeof response === 'object' && response !== null && 'message' in response
+  return (
+    typeof response === 'object' && response !== null && 'message' in response
+  )
 }
-

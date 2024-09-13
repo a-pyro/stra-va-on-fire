@@ -35,7 +35,7 @@ export const subscribeStravaWebhookAction = async () => {
   if (!response.ok) {
     encodedRedirect(
       'error',
-      '/admin',
+      '/protected/admin',
       parseStravaError((await response.json()) as StravaApiErrorResponse),
     )
     return { message: `Failed to subscribe to Strava webhooks` }

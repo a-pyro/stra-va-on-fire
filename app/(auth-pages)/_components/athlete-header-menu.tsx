@@ -16,12 +16,10 @@ import { stravaClient } from '@/lib/strava/client'
 
 import { SignInWithStravaButton } from './sign-in-with-strava-button'
 
-
 export const AthleteHeaderMenu = async () => {
   const response = await stravaClient.getAthlete()
 
   if (isStravaApiErrorResponse(response)) return <SignInWithStravaButton />
-  
 
   const { firstname, lastname, username, profile } = response
 

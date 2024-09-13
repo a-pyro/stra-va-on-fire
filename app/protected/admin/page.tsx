@@ -8,6 +8,7 @@ import {
   subscribeStravaWebhookAction,
 } from '@/lib/strava/actions'
 
+// TODO: hide this page and check for admin role
 const AdminPage = async ({ searchParams }: { searchParams?: Message }) => {
   const subscriptions = await getStravaSubscriptions()
 
