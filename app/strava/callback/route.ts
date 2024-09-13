@@ -72,8 +72,10 @@ Example Request
 
 export async function POST(request: Request) {
   const cookieStore = cookies()
+  // eslint-disable-next-line no-console -- debug
   console.log({ cookieStore })
   const event = (await request.json()) as StravaWebhookEvent
+  // eslint-disable-next-line no-console -- debug
   console.log({ event })
   // return 200 to acknowledge the event
   return NextResponse.json({ message: 'Event acknowledged' }, { status: 200 })
