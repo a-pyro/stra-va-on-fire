@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { stravaClient } from '@/lib/strava/client'
@@ -71,13 +70,6 @@ Example Request
 */
 
 export async function POST(request: Request) {
-  const cookieStore = cookies()
-  // eslint-disable-next-line no-console -- debug
-  console.log('Cookie Store Contents:')
-  cookieStore.getAll().forEach((cookie) => {
-    // eslint-disable-next-line no-console -- debug
-    console.log('cookie', `${cookie.name}: ${cookie.value}`)
-  })
   const event = (await request.json()) as StravaWebhookEvent
   // eslint-disable-next-line no-console -- debug
   console.log({ event })

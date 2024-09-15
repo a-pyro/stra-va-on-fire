@@ -7,6 +7,7 @@ export const envVars = createEnv({
     STRAVA_VERIFY_TOKEN: z.string().min(1),
     STRAVA_CLIENT_ID: z.string().min(1),
     NGROK_DOMAIN: z.string().min(1),
+    GROQ_API_KEY: z.string().min(1),
   },
 
   /**
