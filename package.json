@@ -45,6 +45,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.56.1",
     "@types/google-one-tap": "^1.2.6",
     "@types/node": "^20",
     "@types/react": "^18",

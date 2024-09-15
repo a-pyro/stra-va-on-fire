@@ -4,12 +4,14 @@ const project = resolve(__dirname, 'tsconfig.json')
 
 module.exports = {
   root: true,
+  plugins: ['unused-imports'],
   extends: [
     require.resolve('@vercel/style-guide/eslint/browser'),
     require.resolve('@vercel/style-guide/eslint/react'),
     require.resolve('@vercel/style-guide/eslint/next'),
     require.resolve('@vercel/style-guide/eslint/node'),
     require.resolve('@vercel/style-guide/eslint/typescript'),
+    'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
   parserOptions: { project },
   settings: {
@@ -38,7 +40,6 @@ module.exports = {
     //   },
     // },
   },
-  plugins: ['unused-imports'],
   rules: {
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
