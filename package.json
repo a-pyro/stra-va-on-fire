@@ -5,7 +5,7 @@
   "scripts": {
     "add:component": "npx shadcn@latest add",
     "build": "next build",
-    "check:all": "npm run type:check && npm run lint",
+    "check:all": "npm run typecheck && npm run lint",
     "dev": "next dev",
     "format": "prettier --write .",
     "gen:types": "npx supabase gen types typescript --project-id cpmmqltoyvtgbizjuogt > lib/supabase/generated-types.ts && npm run zodify",
@@ -14,7 +14,7 @@
     "npm:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i",
     "prepare": "husky",
     "start": "next start",
-    "type:check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "zodify": "npx supabase-to-zod --input lib/supabase/generated-types.ts --output lib/supabase/zod-schemas.ts"
   },
   "dependencies": {
